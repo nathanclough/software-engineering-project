@@ -1,5 +1,7 @@
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { Link } from "react-router-dom";
+import logo from '../logo.png';
 
 function Login (props) {
     const onFinish = (values) => {
@@ -8,6 +10,8 @@ function Login (props) {
     };
   
     return (
+      <>
+        <img src={logo} className="App-logo" alt="logo" /> 
       <Form
         name="normal_login"
         className="login-form"
@@ -56,9 +60,10 @@ function Login (props) {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <Link to="/Register">register now!</Link>
         </Form.Item>
       </Form>
+      </>
     );
   };
 export default Login;
