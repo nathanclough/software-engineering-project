@@ -10,8 +10,6 @@ function Login (props) {
     };
   
     return (
-      <>
-        <img src={logo} className="App-logo" alt="logo" /> 
       <Form
         name="normal_login"
         className="login-form"
@@ -20,6 +18,8 @@ function Login (props) {
         }}
         onFinish={onFinish}
       >
+        <img src={logo} className="App-logo" alt="logo" /> 
+
         <Form.Item
           name="username"
           rules={[
@@ -63,7 +63,6 @@ function Login (props) {
           Or <Link to="/Register">register now!</Link>
         </Form.Item>
       </Form>
-      </>
     );
   };
 export default Login;

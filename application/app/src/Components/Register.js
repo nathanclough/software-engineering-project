@@ -81,7 +81,6 @@ function Register(props) {
 
     return (
         <>
-        <img src={logo} className="App-logo" alt="logo" /> 
         <Form
             {...formItemLayout}
             form={form}
@@ -93,6 +92,8 @@ function Register(props) {
             }}
             scrollToFirstError
         >
+            <img src={logo} className="App-logo" alt="logo" /> 
+            
             <Form.Item
             name="email"
             label={
@@ -204,7 +205,7 @@ function Register(props) {
             <Button type="primary" htmlType="submit">
                 Register
             </Button>
-            &emsp; Already have an account? <a href="/Login">Sign in</a>
+            &emsp; Already have an account? <a href="/">Sign in</a>
             </Form.Item>
 
             
