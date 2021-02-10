@@ -16,6 +16,18 @@ import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
+const logoFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+      offset: 8
+    },
+  },
+};
+
 const formItemLayout = {
   wrapperCol: {
     xs: {
@@ -75,8 +87,10 @@ function Register(props) {
             }}
             scrollToFirstError
         >
-            <img src={logo} className="App-logo" alt="logo" /> 
-            
+            <Form.Item {...logoFormItemLayout}>
+              <img src={logo} className="App-logo" alt="logo" /> 
+            </Form.Item>
+
             <Form.Item
             name="email"
             rules={[

@@ -33,6 +33,18 @@ function Login (props) {
         },
       },
     };
+
+    const logoFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+        },
+        sm: {
+          span: 16,
+          offset: 8
+        },
+      },
+    };
   
     return (
       <Form
@@ -44,8 +56,10 @@ function Login (props) {
         onFinish={onFinish}
         {...formItemLayout}
       >
-        <img src={logo} className="App-logo" alt="logo" /> 
-
+        <Form.Item{...logoFormItemLayout}>
+          <img src={logo} className="App-logo" alt="logo" /> 
+        </Form.Item>
+        
         <Form.Item
           name="username"
           rules={[
