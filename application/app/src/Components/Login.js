@@ -8,6 +8,31 @@ function Login (props) {
         // Add api call 
       console.log('Received values of form: ', values);
     };
+    
+    const formItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+        },
+        sm: {
+          span: 16,
+          offset: 4
+        },
+      },
+    };
+
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
   
     return (
       <Form
@@ -17,6 +42,7 @@ function Login (props) {
           remember: true,
         }}
         onFinish={onFinish}
+        {...formItemLayout}
       >
         <img src={logo} className="App-logo" alt="logo" /> 
 
@@ -46,7 +72,7 @@ function Login (props) {
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item>
+        <Form.Item {...tailFormItemLayout}>
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
@@ -56,11 +82,12 @@ function Login (props) {
           </a>
         </Form.Item>
   
-        <Form.Item>
+        <Form.Item             {...tailFormItemLayout}>
+          
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <Link to="/Register">register now!</Link>
+          &emsp; Or <Link to="/register">register now!</Link>
         </Form.Item>
       </Form>
     );

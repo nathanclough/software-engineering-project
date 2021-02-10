@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../logo.png';
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import '../App.css';
 
 import {
@@ -10,25 +11,19 @@ import {
   Checkbox,
   Button
 } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+
+import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
 const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
-  },
   wrapperCol: {
     xs: {
       span: 24,
     },
     sm: {
       span: 16,
+      offset: 4
     },
   },
 };
@@ -52,18 +47,6 @@ function Register(props) {
     console.log('Received values of form: ', values);
     };
 
-    const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-        <Select
-        style={{
-            width: 70,
-        }}
-        >
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-        </Select>
-    </Form.Item>
-    );
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
     const onWebsiteChange = (value) => {
@@ -96,14 +79,6 @@ function Register(props) {
             
             <Form.Item
             name="email"
-            label={
-                <span>
-                <Tooltip title="We use this for account security and contact.">
-                    <QuestionCircleOutlined />
-                </Tooltip>
-                E-mail&nbsp;
-                </span>
-            }
             rules={[
                 {
                 type: 'email',
@@ -115,26 +90,44 @@ function Register(props) {
                 },
             ]}
             >
-            <Input />
+              <Input 
+              prefix={<MailOutlined className="site-form-item-icon" />} 
+              placeholder="example@mail.com"/>
             </Form.Item>
 
             <Form.Item
-            name="firstname"
-            label="First Name"
+            name="username"
             rules={[
                 {
                 required: true,
-                message: 'Please input your first name!',
+                message: 'Please input your username!',
                 whitespace: true,
                 },
             ]}
             >
-            <Input />
+              <Input 
+              prefix={<UserOutlined className="site-form-item-icon"/>}
+              placeholder="Username"
+              />
+
+            </Form.Item>
+
+            <Form.Item
+            name="firstname"
+            rules={[
+                {
+                required: true,
+                message: 'Please input your First Name!',
+                whitespace: true,
+                },
+            ]}
+            >
+              <Input 
+              placeholder="First Name"/>
             </Form.Item>
 
             <Form.Item
             name="lastname"
-            label="Last Name"
             rules={[
                 {
                 required: true,
@@ -143,12 +136,12 @@ function Register(props) {
                 },
             ]}
             >
-            <Input />
+              <Input 
+              placeholder="Last Name"/>
             </Form.Item>
 
             <Form.Item
             name="password"
-            label="Password"
             rules={[
                 {
                 required: true,
@@ -157,12 +150,12 @@ function Register(props) {
             ]}
             hasFeedback
             >
-            <Input.Password />
+              <Input.Password prefix={<LockOutlined className="site-form-item-icon"/>}
+              placeholder="Password"/>
             </Form.Item>
 
             <Form.Item
             name="confirm"
-            label="Confirm Password"
             dependencies={['password']}
             hasFeedback
             rules={[
@@ -181,7 +174,7 @@ function Register(props) {
                 }),
             ]}
             >
-            <Input.Password />
+              <Input.Password placeholder="Confirm Password"/>
             </Form.Item>
             
             <Form.Item
@@ -195,17 +188,18 @@ function Register(props) {
             ]}
             {...tailFormItemLayout}
             >
-            <Checkbox>
-                I have read the <a href="">agreement</a>
-            </Checkbox>
+              <Checkbox>
+                  I have read the <a href="/agreement">agreement</a>
+              </Checkbox>
             </Form.Item>
             
             <Form.Item {...tailFormItemLayout}>
-            
-            <Button type="primary" htmlType="submit">
-                Register
-            </Button>
-            &emsp; Already have an account? <a href="/">Sign in</a>
+      
+              <Button type="primary" htmlType="submit">
+                  Register
+              </Button>
+              &emsp; Already have an account? <Link to="/">Sign in</Link>
+      
             </Form.Item>
 
             
