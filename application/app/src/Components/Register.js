@@ -6,9 +6,7 @@ import '../App.css';
 import {
   Form,
   Input,
-  Tooltip,
   Select,
-  Checkbox,
   Button
 } from 'antd';
 
@@ -189,22 +187,6 @@ function Register(props) {
             ]}
             >
               <Input.Password placeholder="Confirm Password"/>
-            </Form.Item>
-            
-            <Form.Item
-            name="agreement"
-            valuePropName="checked"
-            rules={[
-                {
-                validator: (_, value) =>
-                    value ? Promise.resolve() : Promise.reject('Should accept agreement'),
-                },
-            ]}
-            {...tailFormItemLayout}
-            >
-              <Checkbox>
-                  I have read the <a href="/agreement">agreement</a>
-              </Checkbox>
             </Form.Item>
             
             <Form.Item {...tailFormItemLayout}>
