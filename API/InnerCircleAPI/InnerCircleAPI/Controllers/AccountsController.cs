@@ -24,14 +24,14 @@ namespace InnerCircleAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccount()
         {
-            return await _context.Account.ToListAsync();
+            return await _context.Accounts.ToListAsync();
         }
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
         {
-            var account = await _context.Account.FindAsync(id);
+            var account = await _context.Accounts.FindAsync(id);
 
             if (account == null)
             {
@@ -77,7 +77,7 @@ namespace InnerCircleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
-            _context.Account.Add(account);
+            _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetAccount), new { id = account.AccountId }, account);
@@ -87,13 +87,13 @@ namespace InnerCircleAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {
-            var account = await _context.Account.FindAsync(id);
+            var account = await _context.Accounts.FindAsync(id);
             if (account == null)
             {
                 return NotFound();
             }
 
-            _context.Account.Remove(account);
+            _context.Accounts.Remove(account);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -101,7 +101,7 @@ namespace InnerCircleAPI.Controllers
 
         private bool AccountExists(long id)
         {
-            return _context.Account.Any(e => e.AccountId == id);
+            return _context.Accounts.Any(e => e.AccountId == id);
         }
     }
 }

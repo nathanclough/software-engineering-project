@@ -15,5 +15,10 @@ namespace InnerCircleAPI.Models
         public string Email { get; set; }
         public Password Password { get; set; }
         public Username Username { get;set; }
+        public Account()
+        {
+            Password = new Password();
+            Username = new Username();
+        }
     }
 }

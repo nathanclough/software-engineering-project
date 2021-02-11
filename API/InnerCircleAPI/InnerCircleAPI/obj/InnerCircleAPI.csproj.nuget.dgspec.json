@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\School_Projects\\Software_Engineering\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj": {}
+    "C:\\SchoolProjects\\SoftwareProj\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj": {}
   },
   "projects": {
-    "C:\\School_Projects\\Software_Engineering\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj": {
+    "C:\\SchoolProjects\\SoftwareProj\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\School_Projects\\Software_Engineering\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj",
+        "projectUniqueName": "C:\\SchoolProjects\\SoftwareProj\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj",
         "projectName": "InnerCircleAPI",
-        "projectPath": "C:\\School_Projects\\Software_Engineering\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj",
-        "packagesPath": "C:\\Users\\bigjo\\.nuget\\packages\\",
-        "outputPath": "C:\\School_Projects\\Software_Engineering\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\obj\\",
+        "projectPath": "C:\\SchoolProjects\\SoftwareProj\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\InnerCircleAPI.csproj",
+        "packagesPath": "C:\\Users\\nathanc\\.nuget\\packages\\",
+        "outputPath": "C:\\SchoolProjects\\SoftwareProj\\software-engineering-project\\API\\InnerCircleAPI\\InnerCircleAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\bigjo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nathanc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

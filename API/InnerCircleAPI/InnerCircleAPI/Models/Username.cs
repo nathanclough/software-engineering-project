@@ -11,5 +11,6 @@ namespace InnerCircleAPI.Models
         [ForeignKey("AccountID")]
         public long AccountID { get; set; }
         public string Value { get; set; }
+        public Account Account { get; set; }
     }
 }
