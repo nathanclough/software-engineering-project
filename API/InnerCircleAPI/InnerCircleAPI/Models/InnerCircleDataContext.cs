@@ -19,10 +19,7 @@ namespace InnerCircleAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Password>().HasNoKey();
-            modelBuilder.Entity<Username>().HasNoKey();
-            modelBuilder.Entity<Account>().HasOne(a => a.Password);
-            modelBuilder.Entity<Account>().HasOne(a => a.Username);
+
         }
     }
 }

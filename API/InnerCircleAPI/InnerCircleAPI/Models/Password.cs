@@ -9,9 +9,10 @@ namespace InnerCircleAPI.Models
 {
     public class Password
     {
+        [Key]
+        public long PasswordID { get; set; }
         [ForeignKey("AccountID")]
         public long AccountID { get; set; }
         public string Value { get; set; }
-        public Account Account { get; set; }
     }
 }

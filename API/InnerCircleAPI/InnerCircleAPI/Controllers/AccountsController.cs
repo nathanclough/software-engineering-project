@@ -20,14 +20,14 @@ namespace InnerCircleAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Accounts
+        // GET: api/Accounts1
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccount()
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             return await _context.Accounts.ToListAsync();
         }
 
-        // GET: api/Accounts/5
+        // GET: api/Accounts1/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
         {
@@ -41,7 +41,7 @@ namespace InnerCircleAPI.Controllers
             return account;
         }
 
-        // PUT: api/Accounts/5
+        // PUT: api/Accounts1/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(long id, Account account)
@@ -72,7 +72,7 @@ namespace InnerCircleAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Accounts
+        // POST: api/Accounts1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
@@ -80,10 +80,10 @@ namespace InnerCircleAPI.Controllers
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAccount), new { id = account.AccountId }, account);
+            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
         }
 
-        // DELETE: api/Accounts/5
+        // DELETE: api/Accounts1/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {
