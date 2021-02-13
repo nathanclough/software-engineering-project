@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Redirect } from "react-router-dom";
 import logo from '../logo.png';
 
 
 function Login (props) {  
-    let location = useLocation();
-
-    const token = location.state == null ? "unauthorized" : location.state.token;
+    const [redirect,setRedirect] = useState(null);
+    
     const onFinish = (values) => {
       console.log('Received values of form: ', values);
+      setRedirect("/homepage")
     };
     
     const formItemLayout = {
@@ -50,6 +50,9 @@ function Login (props) {
       },
     };
 
+    if (redirect != null) {
+      return( <Redirect to={redirect} />)
+    }
     return (
       <Form
         name="normal_login"
@@ -62,7 +65,6 @@ function Login (props) {
       >
         <Form.Item{...logoFormItemLayout}>
           <img src={logo} className="App-logo" alt="logo" />
-          <p>{token}</p>
         </Form.Item>
         
         <Form.Item

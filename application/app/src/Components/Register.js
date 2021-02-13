@@ -67,7 +67,7 @@ function Register(props) {
       if( true){
         setRedirect(
           {
-            pathname: "/",
+            pathname: "/homepage",
             state : {
               from: props.location, token: "Authorized"
             }        
