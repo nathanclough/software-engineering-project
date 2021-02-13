@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InnerCircleAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -18,13 +19,6 @@ namespace InnerCircleAPI.Controllers
         public AccountsController(InnerCircleDataContext context)
         {
             _context = context;
-        }
-
-        // GET: api/Accounts1
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
-        {
-            return await _context.Accounts.ToListAsync();
         }
 
         // GET: api/Accounts1/5
@@ -70,17 +64,6 @@ namespace InnerCircleAPI.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Accounts1
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
-        {
-            _context.Accounts.Add(account);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
         }
 
         // DELETE: api/Accounts1/5
