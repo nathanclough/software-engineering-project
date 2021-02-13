@@ -10,7 +10,7 @@ import {
   Button
 } from 'antd';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -51,11 +51,29 @@ const tailFormItemLayout = {
 };
 
 function Register(props) {
+    const [redirect,setRedirect] = useState(null)
     const [form] = Form.useForm();
-
     const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-    };
+      const response = fetch("https://webhook.site/26ead5ba-5bb7-489c-aec1-e826f36130fd", {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+        });
+      
+      // To do handle response 
+      console.log(response.JSON);
+      if( true){
+        setRedirect(
+          {
+            pathname: "/",
+            state : {
+              from: props.location, token: "Authorized"
+            }        
+          });
+      }
+  };
 
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
@@ -72,6 +90,10 @@ function Register(props) {
     value: website,
     }));
 
+    // If the form is complete and redirect is set route to homepage 
+    if (redirect != null) {
+      return( <Redirect to={redirect} />)
+    }
     return (
         <>
         <Form

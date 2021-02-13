@@ -1,11 +1,15 @@
+import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from '../logo.png';
 
-function Login (props) {
+
+function Login (props) {  
+    let location = useLocation();
+
+    const token = location.state == null ? "unauthorized" : location.state.token;
     const onFinish = (values) => {
-        // Add api call 
       console.log('Received values of form: ', values);
     };
     
@@ -45,7 +49,7 @@ function Login (props) {
         },
       },
     };
-  
+
     return (
       <Form
         name="normal_login"
@@ -57,7 +61,8 @@ function Login (props) {
         {...formItemLayout}
       >
         <Form.Item{...logoFormItemLayout}>
-          <img src={logo} className="App-logo" alt="logo" /> 
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>{token}</p>
         </Form.Item>
         
         <Form.Item
