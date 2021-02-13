@@ -312,3 +312,6 @@ C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\I
 C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\obj\Debug\net5.0\ref\InnerCircleAPI.dll
 C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\obj\Debug\net5.0\InnerCircleAPI.pdb
 C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\obj\Debug\net5.0\InnerCircleAPI.genruntimeconfig.cache
+C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\bin\Debug\net5.0\InnerCircleAPI.Views.dll
+C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\bin\Debug\net5.0\InnerCircleAPI.Views.pdb
+C:\SchoolProjects\SoftwareProj\software-engineering-project\API\InnerCircleAPI\InnerCircleAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
