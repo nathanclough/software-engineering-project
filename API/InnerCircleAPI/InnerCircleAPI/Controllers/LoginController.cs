@@ -1,6 +1,7 @@
 ﻿using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -59,7 +60,9 @@ namespace InnerCircleAPI.Controllers
         {
 
             var accountID =  _context.Usernames.Where(a => a.Value == login.Username.Value).FirstOrDefault().AccountID;
-            var account = _context.Accounts.Find(accountID);
+            var account = _context.Accounts.Include(a => a.Username)
+                                           .Include(a => a.Password)
+                                           .Where( a => a.AccountId == accountID).FirstOrDefault();
             
             if ( account.Password.Value == login.Password.Value)
                 return account;

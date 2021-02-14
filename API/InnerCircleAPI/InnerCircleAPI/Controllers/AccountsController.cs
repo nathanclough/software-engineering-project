@@ -21,6 +21,25 @@ namespace InnerCircleAPI.Controllers
             _context = context;
         }
 
+        // GET: api/Accounts1
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
+        {
+            return await _context.Accounts.ToListAsync();
+        }
+
+        // POST: api/Accounts1
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Account>> PostAccount(Account account)
+        {
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
+        }
+
         // GET: api/Accounts1/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
