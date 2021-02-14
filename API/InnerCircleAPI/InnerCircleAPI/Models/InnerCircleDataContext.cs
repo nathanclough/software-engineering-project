@@ -12,6 +12,7 @@ namespace InnerCircleAPI.Models
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Password> Passwords { get; set; }
         public DbSet<Username> Usernames { get; set; }
+        public DbSet<Email> Emails { get; set;  }
         public InnerCircleDataContext(DbContextOptions<InnerCircleDataContext> options) : base(options)
         {
 

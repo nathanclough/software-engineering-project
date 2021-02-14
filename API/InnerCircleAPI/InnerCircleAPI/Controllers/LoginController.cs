@@ -68,7 +68,8 @@ namespace InnerCircleAPI.Controllers
             var accountID =  _context.Usernames.Where(a => a.Value == login.Username.Value).FirstOrDefault().AccountID;
             var account = _context.Accounts.Include(a => a.Username)
                                            .Include(a => a.Password)
-                                           .Where( a => a.AccountId == accountID).FirstOrDefault();
+                                           .Include(a => a.Email)
+                                           .Where(a => a.AccountId == accountID).FirstOrDefault();
             
             if ( account.Password.Value == login.Password.Value)
                 return account;
