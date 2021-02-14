@@ -8,9 +8,27 @@ import logo from '../logo.png';
 function Login (props) {  
     const [redirect,setRedirect] = useState(null);
     
-    const onFinish = (values) => {
-      console.log('Received values of form: ', values);
-      setRedirect("/homepage")
+    async function onFinish  (values)  {
+      const response = await fetch("https://localhost:44326/api/login?", {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        body:JSON.stringify(values)
+        })
+        response.json().then( data => {
+          console.log(data)
+          setRedirect(
+            {
+              pathname: "/homepage",
+              state : {
+                from: props.location, 
+                token: data.token,
+              }        
+            });
+        }).catch( data => { console.log(data)});
     };
     
     const formItemLayout = {
@@ -68,7 +86,7 @@ function Login (props) {
         </Form.Item>
         
         <Form.Item
-          name="username"
+          name="Username"
           rules={[
             {
               required: true,
@@ -79,7 +97,7 @@ function Login (props) {
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
         </Form.Item>
         <Form.Item
-          name="password"
+          name="Password"
           rules={[
             {
               required: true,
@@ -92,15 +110,6 @@ function Login (props) {
             type="password"
             placeholder="Password"
           />
-        </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-  
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
         </Form.Item>
   
         <Form.Item             {...tailFormItemLayout}>

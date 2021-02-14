@@ -48,7 +48,7 @@ namespace InnerCircleAPI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-
+            services.AddScoped<Controllers.ServiceCommon.Authorization>();
             services.AddControllers();
             services.AddDbContext<InnerCircleDataContext>(opt => opt.UseInMemoryDatabase("InnerCircle"));    
         }

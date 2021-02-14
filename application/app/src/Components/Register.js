@@ -64,17 +64,21 @@ function Register(props) {
         },
         body:JSON.stringify(values)
         })
-        response.json().then( data => {console.log(data )});
-      
+        response.json().then( data => {
+          setRedirect(
+            {
+              pathname: "/homepage",
+              state : {
+                from: props.location, 
+                token: data.token,
+                accountID: data.account.accountId
+              }        
+            });
+        }).catch( data => { console.log(data.json())});
+        
       // To do handle response
       // if( true){
-      //   setRedirect(
-      //     {
-      //       pathname: "/homepage",
-      //       state : {
-      //         from: props.location, token: "Authorized"
-      //       }        
-      //     });
+        
       // }
   };
 

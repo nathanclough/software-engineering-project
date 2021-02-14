@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using InnerCircleAPI.Models.DTOs;
+using InnerCircleAPI.Controllers.ServiceCommon;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -16,10 +17,14 @@ namespace InnerCircleAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly InnerCircleDataContext _context;
+        private readonly Authorization _authManager;
 
-        public AccountsController(InnerCircleDataContext context)
+
+        public AccountsController(InnerCircleDataContext context, Authorization authManager)
         {
             _context = context;
+            _authManager = authManager;
+
         }
 
         // GET: api/Accounts1
@@ -48,7 +53,10 @@ namespace InnerCircleAPI.Controllers
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
+            // Create a token for the new account and add to response 
+            var tokenString = _authManager.GenerateJSONWebToken(account);
+
+            return Ok(new { token = tokenString, account =account });
         }
 
         // GET: api/Accounts1/5
