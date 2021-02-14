@@ -53,26 +53,29 @@ const tailFormItemLayout = {
 function Register(props) {
     const [redirect,setRedirect] = useState(null)
     const [form] = Form.useForm();
-    const onFinish = (values) => {
-      const response = fetch("https://webhook.site/26ead5ba-5bb7-489c-aec1-e826f36130fd", {
-        method: 'PUT',
+    async function onFinish  (values)  {
+
+      const response = await fetch("https://localhost:44326/api/Accounts?", {
+        method: 'POST',
+
         headers: {
           'Content-Type': 'application/json',
+          
         },
-        body: JSON.stringify(values),
-        });
+        body:JSON.stringify(values)
+        })
+        response.json().then( data => {console.log(data )});
       
-      // To do handle response 
-      console.log(response.JSON);
-      if( true){
-        setRedirect(
-          {
-            pathname: "/homepage",
-            state : {
-              from: props.location, token: "Authorized"
-            }        
-          });
-      }
+      // To do handle response
+      // if( true){
+      //   setRedirect(
+      //     {
+      //       pathname: "/homepage",
+      //       state : {
+      //         from: props.location, token: "Authorized"
+      //       }        
+      //     });
+      // }
   };
 
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);

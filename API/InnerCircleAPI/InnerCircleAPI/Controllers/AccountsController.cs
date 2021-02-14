@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using InnerCircleAPI.Models.DTOs;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -31,8 +32,19 @@ namespace InnerCircleAPI.Controllers
         // POST: api/Accounts1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
         {
+            var account = new Account
+            {
+                Username = new Username { Value = accountDTO.Username },
+                Password = new Password { Value = accountDTO.Password },
+                Email = new Email { Value = accountDTO.Email },
+                FirstName = accountDTO.FirstName,
+                LastName = accountDTO.LastName
+
+            };
+       
+            
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
