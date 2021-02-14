@@ -22,7 +22,6 @@ namespace InnerCircleAPI.Controllers
         }
 
         // GET: api/Accounts1
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
@@ -56,10 +55,14 @@ namespace InnerCircleAPI.Controllers
 
         // PUT: api/Accounts1/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(long id, Account account)
         {
-            if (id != account.AccountId)
+            var currentUser = HttpContext.User;
+            int currentUserAccountID;
+            Int32.TryParse(currentUser.Claims.FirstOrDefault(c => c.Type == "AccountID").Value,out currentUserAccountID);
+            if (id != account.AccountId || id != currentUserAccountID)
             {
                 return BadRequest();
             }
