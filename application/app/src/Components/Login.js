@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Alert, Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Link, useLocation, Redirect } from "react-router-dom";
 import logo from '../logo.png';
@@ -8,6 +8,8 @@ import logo from '../logo.png';
 function Login (props) {  
     const [redirect,setRedirect] = useState(null);
     
+    const [alert,setAlert] = useState(false);
+
     async function onFinish  (values)  {
       const response = await fetch("https://localhost:44326/api/login?", {
         method: 'POST',
@@ -17,9 +19,13 @@ function Login (props) {
           
         },
         body:JSON.stringify(values)
-        })
-        response.json().then( data => {
-          console.log(data)
+        }).catch( data => { 
+          
+      });
+        
+      response.json().then( data => {
+        console.log(data)
+        if (data.token != null)
           setRedirect(
             {
               pathname: "/homepage",
@@ -27,8 +33,13 @@ function Login (props) {
                 from: props.location, 
                 token: data.token,
               }        
-            });
-        }).catch( data => { console.log(data)});
+            })
+        else 
+           {
+             setAlert(true)
+           }
+
+      })
     };
     
     const formItemLayout = {
@@ -85,13 +96,22 @@ function Login (props) {
           <img src={logo} className="App-logo" alt="logo" />
         </Form.Item>
         
+        {
+          alert && (<Alert
+          style={{ marginBottom: 24 }}
+          message="Incorrect Username or password"
+          type="error"
+          showIcon
+          closable
+        />)}
+
         <Form.Item
           name="Username"
           rules={[
             {
               required: true,
               message: 'Please input your Username!',
-            },
+            }
           ]}
         >
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
