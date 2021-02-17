@@ -42,17 +42,12 @@ namespace InnerCircleAPI.Controllers.ServiceCommon
         }
         public Account AuthenticateUser(Account login)
         {
-
-            var accountID = _context.Usernames.Where(a => a.Value == login.Username.Value).FirstOrDefault().AccountID;
-            var account = _context.Accounts.Include(a => a.Username)
+            // Return the acct obj if it exists else return null 
+            return _context.Accounts.Include(a => a.Username)
                                            .Include(a => a.Password)
                                            .Include(a => a.Email)
-                                           .Where(a => a.AccountId == accountID).FirstOrDefault();
-
-            if (account.Password.Value == login.Password.Value)
-                return account;
-            else
-                return null;
+                                           .Where(a => a.Username.Value == login.Username.Value 
+                                                    && a.Password.Value == login.Password.Value).FirstOrDefault();
         }
     }
 }

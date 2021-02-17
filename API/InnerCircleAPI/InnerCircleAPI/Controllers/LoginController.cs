@@ -32,20 +32,31 @@ namespace InnerCircleAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] AccountDTO creds)
+        public IActionResult Login([FromBody] AccountDTO loginCreds)
         {
-            var login = new Account
+            var loginAccount = new Account
             {
-                Username = new Username { Value = creds.Username },
-                Password = new Password { Value = creds.Password }
+                Username = new Username { Value = loginCreds.Username },
+                Password = new Password { Value = loginCreds.Password }
             };
+            
+            var authorizedAcct = _authManager.AuthenticateUser(loginAccount);
+            // set the response to unauthorized as default 
             IActionResult response = Unauthorized();
-            var user = _authManager.AuthenticateUser(login);
 
-            if (user != null)
+            // If the authorizedAcct is not null then it was authenticated so set new response 
+            if (authorizedAcct != null)
             {
-                var tokenString = _authManager.GenerateJSONWebToken(user);
-                response = Ok(new { token = tokenString });
+                var accountDto = new AccountDTO
+                {
+                    Username = authorizedAcct.Username.Value,
+                    FirstName = authorizedAcct.FirstName,
+                    LastName = authorizedAcct.LastName,
+                    Email = authorizedAcct.Email.Value
+                };
+
+                var tokenString = _authManager.GenerateJSONWebToken(authorizedAcct);
+                response = Ok(new { token = tokenString , account = accountDto });
             }
 
             return response;
