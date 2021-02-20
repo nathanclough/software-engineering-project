@@ -7,6 +7,7 @@ namespace InnerCircleAPI.Models.DTOs
 {
     public class AccountDTO
     {
+        public long AccountId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public  string Email { get; set; }

@@ -49,6 +49,7 @@ namespace InnerCircleAPI.Controllers
             {
                 var accountDto = new AccountDTO
                 {
+                    AccountId = authorizedAcct.AccountId,
                     Username = authorizedAcct.Username.Value,
                     FirstName = authorizedAcct.FirstName,
                     LastName = authorizedAcct.LastName,
