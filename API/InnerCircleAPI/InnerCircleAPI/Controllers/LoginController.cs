@@ -1,4 +1,5 @@
 ﻿using InnerCircleAPI.Models;
+using InnerCircleAPI.Controllers.ServiceCommon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using InnerCircleAPI.Models.DTOs;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -18,63 +20,49 @@ namespace InnerCircleAPI.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly InnerCircleDataContext _context;
-        private readonly IConfiguration _config;
 
-        public LoginController(InnerCircleDataContext context, IConfiguration config)
+        private readonly Authorization _authManager;
+        private readonly InnerCircleDataContext _context;
+
+        public LoginController(InnerCircleDataContext context, IConfiguration config, Authorization authManager)
         {
             _context = context;
-            _config = config;
+            _authManager = authManager;
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] Account login)
+        public IActionResult Login([FromBody] AccountDTO loginCreds)
         {
-            IActionResult response = Unauthorized();
-            var user = AuthenticateUser(login);
-
-            if (user != null)
+            var loginAccount = new Account
             {
-                var tokenString = GenerateJSONWebToken(user);
-                response = Ok(new { token = tokenString });
+                Username = new Username { Value = loginCreds.Username },
+                Password = new Password { Value = loginCreds.Password }
+            };
+            
+            var authorizedAcct = _authManager.AuthenticateUser(loginAccount);
+            // set the response to unauthorized as default 
+            IActionResult response = Unauthorized();
+
+            // If the authorizedAcct is not null then it was authenticated so set new response 
+            if (authorizedAcct != null)
+            {
+                var accountDto = new AccountDTO
+                {
+                    AccountId = authorizedAcct.AccountId,
+                    Username = authorizedAcct.Username.Value,
+                    FirstName = authorizedAcct.FirstName,
+                    LastName = authorizedAcct.LastName,
+                    Email = authorizedAcct.Email.Value
+                };
+
+                var tokenString = _authManager.GenerateJSONWebToken(authorizedAcct);
+                response = Ok(new { token = tokenString , account = accountDto });
             }
 
             return response;
         }
 
-        private string GenerateJSONWebToken(Account userInfo)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim("AccountID",userInfo.AccountId.ToString())
-            };
-
-            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-              _config["Jwt:Issuer"],
-               claims,
-              expires: DateTime.Now.AddMinutes(120),
-              signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private Account AuthenticateUser(Account login)
-        {
-
-            var accountID =  _context.Usernames.Where(a => a.Value == login.Username.Value).FirstOrDefault().AccountID;
-            var account = _context.Accounts.Include(a => a.Username)
-                                           .Include(a => a.Password)
-                                           .Include(a => a.Email)
-                                           .Where(a => a.AccountId == accountID).FirstOrDefault();
-            
-            if ( account.Password.Value == login.Password.Value)
-                return account;
-            else 
-                return null;
-        }
+        
     }
 }

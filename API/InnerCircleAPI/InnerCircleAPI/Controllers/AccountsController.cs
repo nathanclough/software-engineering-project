@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using InnerCircleAPI.Models.DTOs;
+using InnerCircleAPI.Controllers.ServiceCommon;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -15,10 +17,14 @@ namespace InnerCircleAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly InnerCircleDataContext _context;
+        private readonly Authorization _authManager;
 
-        public AccountsController(InnerCircleDataContext context)
+
+        public AccountsController(InnerCircleDataContext context, Authorization authManager)
         {
             _context = context;
+            _authManager = authManager;
+
         }
 
         // GET: api/Accounts1
@@ -31,12 +37,26 @@ namespace InnerCircleAPI.Controllers
         // POST: api/Accounts1
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
         {
+            var account = new Account
+            {
+                Username = new Username { Value = accountDTO.Username },
+                Password = new Password { Value = accountDTO.Password },
+                Email = new Email { Value = accountDTO.Email },
+                FirstName = accountDTO.FirstName,
+                LastName = accountDTO.LastName
+
+            };
+       
+            
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
+            // Create a token for the new account and add to response 
+            var tokenString = _authManager.GenerateJSONWebToken(account);
+
+            return Ok(new { token = tokenString, account =account });
         }
 
         // GET: api/Accounts1/5

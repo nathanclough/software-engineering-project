@@ -1,12 +1,46 @@
-import { Form, Input, Button, Checkbox } from 'antd';
+import React, { useState } from 'react';
+import { Alert, Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link } from "react-router-dom";
+import { Link, useLocation, Redirect } from "react-router-dom";
 import logo from '../logo.png';
 
-function Login (props) {
-    const onFinish = (values) => {
-        // Add api call 
-      console.log('Received values of form: ', values);
+
+function Login (props) {  
+    const [redirect,setRedirect] = useState(null);
+    
+    const [alert,setAlert] = useState(false);
+
+    async function onFinish  (values)  {
+      const response = await fetch("https://localhost:44326/api/login?", {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        body:JSON.stringify(values)
+        }).catch( data => { 
+          
+      });
+        
+      response.json().then( data => {
+        console.log(data)
+        if (data.token != null)
+          setRedirect(
+            {
+              pathname: "/homepage",
+              state : {
+                from: props.location, 
+                token: data.token,
+                accountID: data.account.accountId
+              }        
+            })
+        else 
+           {
+             setAlert(true)
+           }
+
+      })
     };
     
     const formItemLayout = {
@@ -45,7 +79,10 @@ function Login (props) {
         },
       },
     };
-  
+
+    if (redirect != null) {
+      return( <Redirect to={redirect} />)
+    }
     return (
       <Form
         name="normal_login"
@@ -57,22 +94,31 @@ function Login (props) {
         {...formItemLayout}
       >
         <Form.Item{...logoFormItemLayout}>
-          <img src={logo} className="App-logo" alt="logo" /> 
+          <img src={logo} className="App-logo" alt="logo" />
         </Form.Item>
         
+        {
+          alert && (<Alert
+          style={{ marginBottom: 24 }}
+          message="Incorrect Username or password"
+          type="error"
+          showIcon
+          closable
+        />)}
+
         <Form.Item
-          name="username"
+          name="Username"
           rules={[
             {
               required: true,
               message: 'Please input your Username!',
-            },
+            }
           ]}
         >
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
         </Form.Item>
         <Form.Item
-          name="password"
+          name="Password"
           rules={[
             {
               required: true,
@@ -85,15 +131,6 @@ function Login (props) {
             type="password"
             placeholder="Password"
           />
-        </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-  
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
         </Form.Item>
   
         <Form.Item             {...tailFormItemLayout}>

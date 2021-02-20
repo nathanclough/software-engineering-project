@@ -10,7 +10,7 @@ import {
   Button
 } from 'antd';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -51,11 +51,36 @@ const tailFormItemLayout = {
 };
 
 function Register(props) {
+    const [redirect,setRedirect] = useState(null)
     const [form] = Form.useForm();
+    async function onFinish  (values)  {
 
-    const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-    };
+      const response = await fetch("https://localhost:44326/api/Accounts?", {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json',
+          
+        },
+        body:JSON.stringify(values)
+        })
+        response.json().then( data => {
+          setRedirect(
+            {
+              pathname: "/homepage",
+              state : {
+                from: props.location, 
+                token: data.token,
+                accountID: data.account.accountId
+              }        
+            });
+        }).catch( data => { console.log(data.json())});
+        
+      // To do handle response
+      // if( true){
+        
+      // }
+  };
 
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
 
@@ -72,6 +97,10 @@ function Register(props) {
     value: website,
     }));
 
+    // If the form is complete and redirect is set route to homepage 
+    if (redirect != null) {
+      return( <Redirect to={redirect} />)
+    }
     return (
         <>
         <Form
