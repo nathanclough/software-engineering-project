@@ -33,10 +33,9 @@ code {
 }
 .logo {
   float: left;
-  width: 120px;
-  height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
+  width: 60px;
+  height: 60px;
+  margin: 5px 5px 5px 5px;
 }
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: transparent;
