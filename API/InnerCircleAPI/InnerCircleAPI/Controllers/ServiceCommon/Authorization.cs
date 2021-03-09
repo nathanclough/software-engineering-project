@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BC = BCrypt.Net.BCrypt;
 
 namespace InnerCircleAPI.Controllers.ServiceCommon
 {
@@ -43,11 +44,18 @@ namespace InnerCircleAPI.Controllers.ServiceCommon
         public Account AuthenticateUser(Account login)
         {
             // Return the acct obj if it exists else return null 
-            return _context.Accounts.Include(a => a.Username)
+            var account = _context.Accounts.Include(a => a.Username)
                                            .Include(a => a.Password)
-                                           .Include(a => a.Email)
-                                           .Where(a => a.Username.Value == login.Username.Value 
-                                                    && a.Password.Value == login.Password.Value).FirstOrDefault();
+                                           .SingleOrDefault( a => a.Username.Value == login.Username.Value);
+
+            if ( account == null || !BC.Verify(login.Password.Value, account.Password.Value))
+            {
+                return null; 
+            }
+            else
+            {
+                return account;
+            }
         }
     }
 }
