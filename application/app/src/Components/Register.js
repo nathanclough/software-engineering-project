@@ -55,7 +55,7 @@ function Register(props) {
     const [form] = Form.useForm();
     async function onFinish  (values)  {
 
-      const response = await fetch("https://localhost:44326/api/Accounts?", {
+      const response = await fetch(process.env.REACT_APP_API_URL +"Accounts?", {
         method: 'POST',
 
         headers: {
