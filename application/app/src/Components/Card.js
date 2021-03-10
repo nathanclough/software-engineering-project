@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import { Card, Avatar, Button } from 'antd';
 
@@ -15,8 +14,7 @@ return (
         }}
 
       avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-      title="First Name Last Name"
-      description="This is the description"
+      title={props.username}
     />
   </Card>
 )

@@ -12,13 +12,6 @@ const { Header, Footer, Sider, Content } = Layout;
 
 function Homepage(props){
     var location = useLocation();
-
-    const [signoutVisible,setSignoutVisible] = useState(null); 
-
-    const handleVisibleChange = signoutVisible => {
-      setSignoutVisible.setState(signoutVisible)
-    }
-
     const content = (
       <div>
         <Link to="/">Signout</Link>
@@ -38,28 +31,23 @@ function Homepage(props){
               <Menu.Item key="3">Messaging</Menu.Item>
             </Menu>
       </Header>
-      <Layout style={{padding: '75px 0px'}}>
-      <Sider theme="light"
-          breakpoint="lg"
-          collapsedWidth="0"
-          style={{ position: 'fixed', zIndex: 1, height: '100%',width: '100%' }}
-        >
-          <div className="side-search"><Search/></div>
-          <h2>Requests</h2>
-        </Sider>
-        <Content style={{ padding: '2% 15%' }}>
-        <div className="site-layout-content">Content</div>
-      </Content>
+        <Layout style={{padding: '75px 0px'}}>
+          <Sider theme="light"
+            breakpoint="lg"
+            collapsedWidth="0"
+            style={{ position: 'fixed', zIndex: 1, height: '100%',width: '100%' }}
+          >
+          <div className="side-bar">
+            <Search className="side-bar search"/>
+            <h2>Requests</h2>
+          </div>
+          </Sider>
+          <Content style={{ padding: '2% 15%' }}>
+            <div className="site-layout-content">Content</div>
+          </Content>
 
-    </Layout>
+        </Layout>
     <Footer className="site-layout-footer"style={{ textAlign: 'center' }}>Inner Circle ©2021 </Footer> 
-
-       
-      
-      
-      
-      
-
     </Layout>
 
   </>
