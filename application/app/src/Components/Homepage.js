@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useLocation,Redirect } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Search from './UserSearch'
-import { Layout, Menu, Space} from 'antd';
+import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import '../index.css';
 
@@ -11,35 +11,58 @@ const { Header, Footer, Sider, Content } = Layout;
 
 function Homepage(props){
     var location = useLocation();
+
+    const [signoutVisible,setSignoutVisible] = useState(null); 
+
+    const handleVisibleChange = signoutVisible => {
+      setSignoutVisible.setState(signoutVisible)
+    }
+
+    const content = (
+      <div>
+        <Link to="/">Signout</Link>
+      </div>
+    );
     return(
-        <Layout className="layout">
-          
-          <Header>
-            <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-                <Link to="/">Sign Out</Link>
+        <>
+    <Layout className="layout">
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+        <Popover content={content} placement="bottomLeft"
+              title={"Username"} trigger="hover">
                 <img src={logo} className="logo" />
-                <Menu.Item key="1">Home</Menu.Item>
-                <Menu.Item key="2">Circle</Menu.Item>
-                <Menu.Item key="3">Messaging</Menu.Item>
-              </Menu>
-          </Header>
+              </Popover>
+          <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
+              <Menu.Item key="1">Home</Menu.Item>
+              <Menu.Item key="2">Circle</Menu.Item>
+              <Menu.Item key="3">Messaging</Menu.Item>
+            </Menu>
+      </Header>
+      <Layout style={{padding: '75px 0px'}}>
+      <Sider theme="light"
+          breakpoint="lg"
+          collapsedWidth="0"
+          style={{ position: 'fixed', zIndex: 1, height: '100%',width: '100%' }}
+        >
+          <div className="side-search"><Search/></div>
+          <h2>Requests</h2>
+        </Sider>
+        <Content style={{ padding: '2% 15%' }}>
+        <div className="site-layout-content">Content</div>
+      </Content>
 
-          <Layout style={{padding: '5px 0px'}}>
-            <Sider theme="light"
-              breakpoint="lg"
-              collapsedWidth="0"
-            >
-              <div className="side-search"><Search/></div>
-            </Sider>
-            
-            <Content style={{ padding: '25px 40px' }}>
-              <div className="site-layout-content">Content</div>
-            </Content>
-          </Layout>
+    </Layout>
+    <Footer className="site-layout-footer"style={{ textAlign: 'center' }}>Inner Circle ©2021 </Footer> 
 
-          <Footer className="site-layout-footer"style={{ textAlign: 'center' }}>Inner Circle ©2021 </Footer>
-        
-        </Layout>
-     );
+       
+      
+      
+      
+      
+
+    </Layout>
+
+  </>
+      );
 }
+
 export default Homepage

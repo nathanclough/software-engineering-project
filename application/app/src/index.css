@@ -1,5 +1,4 @@
 @import "~antd/dist/antd.css";
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -7,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 code {
@@ -14,7 +14,8 @@ code {
     monospace;
 }
 .site-layout-content {
-  min-height: 280px;
+  position: relative;
+  min-height: 240px;
   padding: 24px;
   background: #fff;
 }
@@ -25,11 +26,15 @@ code {
 }
 
 .ant-layout-header {
-  background: #c7c7c7;
+  background: #f2f2f2;
+  padding: inherit;
 }
 
 .ant-layout {
   background: #f2f2f2;
+  height: auto;
+  min-height: 1000px;
+  padding: inherit;
 }
 .logo {
   float: left;
@@ -45,4 +50,5 @@ code {
 }
 .side-search {
   padding: 5px;
+  height: 50%;
 }
