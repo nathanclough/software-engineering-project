@@ -12,8 +12,6 @@ import {
 
 import { Link, Redirect } from 'react-router-dom';
 
-const { Option } = Select;
-
 const logoFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -55,7 +53,7 @@ function Register(props) {
     const [form] = Form.useForm();
     async function onFinish  (values)  {
 
-      const response = await fetch("https://localhost:44326/api/Accounts?", {
+      const response = await fetch(process.env.REACT_APP_API_URL +"Accounts?", {
         method: 'POST',
 
         headers: {
@@ -82,21 +80,6 @@ function Register(props) {
       // }
   };
 
-    const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-
-    const onWebsiteChange = (value) => {
-    if (!value) {
-        setAutoCompleteResult([]);
-    } else {
-        setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
-    }
-    };
-
-    const websiteOptions = autoCompleteResult.map((website) => ({
-    label: website,
-    value: website,
-    }));
-
     // If the form is complete and redirect is set route to homepage 
     if (redirect != null) {
       return( <Redirect to={redirect} />)
@@ -108,10 +91,6 @@ function Register(props) {
             form={form}
             name="register"
             onFinish={onFinish}
-            initialValues={{
-            residence: ['zhejiang', 'hangzhou', 'xihu'],
-            prefix: '86',
-            }}
             scrollToFirstError
         >
             <Form.Item {...logoFormItemLayout}>

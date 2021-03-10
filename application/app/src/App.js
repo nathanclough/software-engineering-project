@@ -1,4 +1,3 @@
-import logo from './logo.png';
 import './App.css';
 import Register from './Components/Register';
 import Login from './Components/Login';

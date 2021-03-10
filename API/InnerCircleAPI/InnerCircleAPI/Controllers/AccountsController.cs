@@ -9,6 +9,8 @@ using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using InnerCircleAPI.Models.DTOs;
 using InnerCircleAPI.Controllers.ServiceCommon;
+using BC = BCrypt.Net.BCrypt;
+
 
 namespace InnerCircleAPI.Controllers
 {
@@ -24,17 +26,16 @@ namespace InnerCircleAPI.Controllers
         {
             _context = context;
             _authManager = authManager;
-
         }
 
-        // GET: api/Accounts1
+        // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
         {
             return await _context.Accounts.ToListAsync();
         }
 
-        // POST: api/Accounts1
+        // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
@@ -42,7 +43,7 @@ namespace InnerCircleAPI.Controllers
             var account = new Account
             {
                 Username = new Username { Value = accountDTO.Username },
-                Password = new Password { Value = accountDTO.Password },
+                Password = new Password { Value = BC.HashPassword(accountDTO.Password) },
                 Email = new Email { Value = accountDTO.Email },
                 FirstName = accountDTO.FirstName,
                 LastName = accountDTO.LastName
@@ -55,11 +56,10 @@ namespace InnerCircleAPI.Controllers
 
             // Create a token for the new account and add to response 
             var tokenString = _authManager.GenerateJSONWebToken(account);
-
             return Ok(new { token = tokenString, account =account });
         }
 
-        // GET: api/Accounts1/5
+        // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
         {
@@ -73,42 +73,7 @@ namespace InnerCircleAPI.Controllers
             return account;
         }
 
-        // PUT: api/Accounts1/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(long id, Account account)
-        {
-            var currentUser = HttpContext.User;
-            int currentUserAccountID;
-            Int32.TryParse(currentUser.Claims.FirstOrDefault(c => c.Type == "AccountID").Value,out currentUserAccountID);
-            if (id != account.AccountId || id != currentUserAccountID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(account).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // DELETE: api/Accounts1/5
+        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {

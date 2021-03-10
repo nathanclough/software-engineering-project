@@ -11,7 +11,7 @@ function Login (props) {
     const [alert,setAlert] = useState(false);
 
     async function onFinish  (values)  {
-      const response = await fetch("https://localhost:44326/api/login?", {
+      const response = await fetch(process.env.REACT_APP_API_URL +"login?", {
         method: 'POST',
 
         headers: {
