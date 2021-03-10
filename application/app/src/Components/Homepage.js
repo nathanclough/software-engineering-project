@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu, Space} from 'antd';
+import ProfileCard from './Card';
 import logo from '../logo.png';
 import '../index.css';
 
@@ -29,7 +30,9 @@ function Homepage(props){
         side bar 
     </Sider>
     <Content style={{ padding: '25px 40px' }}>
-      <div className="site-layout-content">Content</div>
+      <div className="site-layout-content">Content
+      <ProfileCard></ProfileCard>
+</div>
     </Content>
     </Layout>
     <Footer className="site-layout-footer"style={{ textAlign: 'center' }}>Inner Circle ©2021 </Footer>
