@@ -11,17 +11,6 @@ function Search(){
     // On input change make api call and set the new results 
     const handleInputChange = (event) => {
         setSearchArg(event.target.value)
-        // console.log(event.target.value)
-        // var filteredResults = []
-        // if( results != null ){
-        //     filteredResults = results.filter( result => 
-        //         result.username.toLowerCase()
-        //             .includes(event.target.value.toLowerCase))
-        // }
-        
-        // if (filteredResults.length == 0)
-        //     filteredResults = getSearchResults(event.target.value)
-        // setResults(filteredResults)
     };
 
     // Makes api call for first 10 users that contain given string 
