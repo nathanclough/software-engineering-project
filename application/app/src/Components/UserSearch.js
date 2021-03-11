@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {Input,Icon} from 'antd'
 import {SearchOutlined } from '@ant-design/icons'
 import ProfileCard from './Card';
-import { fixControlledValue } from 'antd/lib/input/Input';
 
 // Dynamically shows first 10 users based on input 
 function Search(){
@@ -28,7 +27,9 @@ function Search(){
         { username : "Nick", accountId : "5" },
         { username : "Avery", accountId : "4" },
         { username : "Jordan", accountId : "3" },
-        { username : "Alex", accountId : "2" }
+        { username : "Alex", accountId : "2" },
+        { username : "Joey", accountId: "1"},
+        { username : "Krystyna", accountId: "13"}
     ])
 
     const [ searchArg, setSearchArg] = useState("")
