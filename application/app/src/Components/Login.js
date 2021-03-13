@@ -32,6 +32,7 @@ function Login (props) {
               state : {
                 from: props.location, 
                 token: data.token,
+                username: data.account.username,
                 accountID: data.account.accountId
               }        
             })

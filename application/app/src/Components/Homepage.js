@@ -23,7 +23,7 @@ function Homepage(props){
     <Layout className="layout">
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
         <Popover content={content} placement="bottomLeft"
-              title={location.state.token} trigger="hover">
+              title={location.state.username} trigger="hover">
                 <img src={logo} className="logo" />
               </Popover>
           <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
