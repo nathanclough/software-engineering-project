@@ -41,6 +41,7 @@ namespace InnerCircleAPI.Controllers.ServiceCommon
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
         public Account AuthenticateUser(Account login)
         {
             // Return the acct obj if it exists else return null 

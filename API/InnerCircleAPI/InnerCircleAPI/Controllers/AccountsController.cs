@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using InnerCircleAPI.Models.DTOs;
 using InnerCircleAPI.Controllers.ServiceCommon;
 using BC = BCrypt.Net.BCrypt;
-
+using System.Text.RegularExpressions;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -26,13 +26,6 @@ namespace InnerCircleAPI.Controllers
         {
             _context = context;
             _authManager = authManager;
-        }
-
-        // GET: api/Accounts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
-        {
-            return await _context.Accounts.ToListAsync();
         }
 
         // POST: api/Accounts
@@ -61,23 +54,48 @@ namespace InnerCircleAPI.Controllers
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(long id)
+        public async Task<ActionResult<AccountDTO>> GetAccount(long id)
         {
-            var account = await _context.Accounts.FindAsync(id);
+            var account = await _context.Accounts.Include(a => a.Username).SingleOrDefaultAsync( a =>  a.AccountId == id);
 
             if (account == null)
             {
                 return NotFound();
             }
 
-            return account;
+            return new AccountDTO {
+                AccountId = account.AccountId,
+                Username = account.Username.Value,
+                FirstName = account.FirstName,
+                LastName = account.LastName
+            };
+           
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<AccountDTO>>> GetAccounts(string username)
+        {
+            var a = await _context.Accounts.Include(a => a.Username).Where(a => a.Username.Value.Contains(username)).Take(10).Select(a => new AccountDTO
+            {
+                AccountId = a.AccountId,
+                Username = a.Username.Value,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToListAsync();
+
+            return a;
+            
         }
 
         // DELETE: api/Accounts/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {
-            var account = await _context.Accounts.FindAsync(id);
+            if (HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value != id.ToString())
+                return Unauthorized();
+
+            var account = await _context.Accounts.SingleOrDefaultAsync(a => a.AccountId == id);
             if (account == null)
             {
                 return NotFound();
@@ -87,11 +105,6 @@ namespace InnerCircleAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool AccountExists(long id)
-        {
-            return _context.Accounts.Any(e => e.AccountId == id);
         }
     }
 }

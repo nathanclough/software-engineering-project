@@ -1,55 +1,55 @@
 import React, { useState } from 'react';
-import {Input,Icon} from 'antd'
+import {Input} from 'antd'
 import {SearchOutlined } from '@ant-design/icons'
 import ProfileCard from './Card';
+import {debounce} from 'lodash';
 
-// Dynamically shows first 10 users based on input 
 function Search(){
-    
-
     // On input change make api call and set the new results 
     const handleInputChange = (event) => {
+        if( event.target.value != "")
+            getSearchResults(event.target.value)
         setSearchArg(event.target.value)
+
     };
 
+  
     // Makes api call for first 10 users that contain given string 
-    const getSearchResults = () =>{
-
+    const getSearchResults = (username) =>{
+        fetch(`${process.env.REACT_APP_API_URL}Accounts?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                setResults(data)
+            }) 
+            .catch(error => console.log(error))
     }
-    const [results,setResults] = useState( [
-        { username: "James", accountId : "12" },
-        { username : "Bryce", accountId : "11" },
-        { username  :"Walter", accountId : "10" },
-        { username :"Michael", accountId : "9" },
-        { username : "Journe", accountId : "8" },
-        { username : "Nathan", accountId : "7" },
-        { username : "Justin", accountId : "6" },
-        { username : "Nick", accountId : "5" },
-        { username : "Avery", accountId : "4" },
-        { username : "Jordan", accountId : "3" },
-        { username : "Alex", accountId : "2" },
-        { username : "Joey", accountId: "1"},
-        { username : "Krystyna", accountId: "13"}
-    ])
+    const [results,setResults] = useState( null)
 
     const [ searchArg, setSearchArg] = useState("")
     
     const renderSearchResults = () => {
         if (results != null && searchArg != "")    
-            return ( 
-                <>{ results.filter(result => 
+            {
+                const filteredResults = results.filter(result => 
                             result.username.toLowerCase().includes(searchArg.toLowerCase()))
-                                .map( (result) => 
+                if( filteredResults.length < 0)
+                    getSearchResults()
+                else
+                    return ( 
+                    <>{ 
+                                results.map( (result) => 
                                 { 
-                                    return (<ProfileCard username={result.username}></ProfileCard>)
+                                    return (
+                                        <ProfileCard  value={result} username={result.username}></ProfileCard>)
                                 } )
                     }
-                </> );
+                    </> );
+            }
         }
 
     return (
         <div className="side-bar search">
-            <Input className="side-bar search input" prefix={<SearchOutlined className="site-form-item-icon"/>} placeholder="Users" loading onChange={handleInputChange}>
+            <Input className="side-bar search input" prefix={<SearchOutlined className="site-form-item-icon"/>} placeholder="Users" loading="true" onChange={debounce(handleInputChange, 250)}>
             </Input>
             <div className="side-bar search results">
             {renderSearchResults()}

@@ -10,6 +10,7 @@ import '../index.css';
 
 const { Header, Footer, Sider, Content } = Layout;
 
+
 function Homepage(props){
     var location = useLocation();
     const content = (
@@ -22,7 +23,7 @@ function Homepage(props){
     <Layout className="layout">
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
         <Popover content={content} placement="bottomLeft"
-              title={"Username"} trigger="hover">
+              title={location.state.token} trigger="hover">
                 <img src={logo} className="logo" />
               </Popover>
           <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>

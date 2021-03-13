@@ -73,11 +73,6 @@ function Register(props) {
               }        
             });
         }).catch( data => { console.log(data.json())});
-        
-      // To do handle response
-      // if( true){
-        
-      // }
   };
 
     // If the form is complete and redirect is set route to homepage 
