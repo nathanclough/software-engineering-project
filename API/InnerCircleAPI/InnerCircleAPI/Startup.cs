@@ -50,7 +50,8 @@ namespace InnerCircleAPI
             });
             services.AddScoped<Controllers.ServiceCommon.Authorization>();
             services.AddControllers();
-            services.AddDbContext<InnerCircleDataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));    
+            services.AddDbContext<InnerCircleDataContext>(opt => opt.UseInMemoryDatabase("InnerCircleDB"));
+            //services.AddDbContext<InnerCircleDataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));    
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
