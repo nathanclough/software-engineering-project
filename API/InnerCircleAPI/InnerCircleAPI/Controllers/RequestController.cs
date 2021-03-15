@@ -1,4 +1,5 @@
 ﻿using InnerCircleAPI.Models;
+using InnerCircleAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace InnerCircleAPI.Controllers
             {
                 RecepientId = requestDTO.RecepientId,
                 SenderId = requestDTO.SenderId,
-                status = new Status { value = "Pending" }
+                status = (int)Status.Pending
             };
 
             _context.Requests.Add(request);
