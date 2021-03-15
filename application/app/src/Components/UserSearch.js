@@ -4,7 +4,7 @@ import {SearchOutlined } from '@ant-design/icons'
 import ProfileCard from './Card';
 import {debounce} from 'lodash';
 
-function Search(){
+function Search(props){
     // On input change make api call and set the new results 
     const handleInputChange = (event) => {
         if( event.target.value != "")
@@ -13,7 +13,10 @@ function Search(){
 
     };
 
-  
+    const handleResultClick = (accountId) =>
+    {
+        props.handleShowUserProfile(true,accountId)
+    }
     // Makes api call for first 10 users that contain given string 
     const getSearchResults = (username) =>{
         fetch(`${process.env.REACT_APP_API_URL}Accounts?username=${username}`)
@@ -40,7 +43,7 @@ function Search(){
                                 results.map( (result) => 
                                 { 
                                     return (
-                                        <ProfileCard  value={result} username={result.username}></ProfileCard>)
+                                        <ProfileCard handleCardClick={handleResultClick} accountId={result.accountId} value={result} username={result.username}></ProfileCard>)
                                 } )
                     }
                     </> );

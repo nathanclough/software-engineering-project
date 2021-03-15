@@ -34,7 +34,6 @@ code {
   background: #f2f2f2;
   height: auto;
   min-height: 1000px;
-  padding: inherit;
 }
 .logo {
   float: left;
@@ -47,6 +46,7 @@ code {
 }
 .ant-menu {
   background: #c7c7c7;
+  padding: 0px, 0px;
 }
 .side-bar {
   padding: 5px;

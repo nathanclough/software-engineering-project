@@ -5,9 +5,12 @@ import { Card, Avatar, Button } from 'antd';
 const { Meta } = Card;
 
 function ProfileCard (props) {  
+
+ const handleClick = e => {
+   props.handleCardClick(props.accountId)
+}
 return (
-  <Card 
-  >
+  <Card onClick={handleClick}>
     <Meta
         style={{
          fontSize: 12
