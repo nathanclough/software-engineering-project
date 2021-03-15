@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Menu} from 'antd';
+import { Layout, Menu, Button, notification} from 'antd';
 import ProfileCard from './Card';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -9,8 +9,19 @@ function UserProfile(props){
     const [currentTab, setCurrentTab]  = useState("About");
     
     const handleClick = e => {
+        // TODO: add the user name to the notification
         setCurrentTab( e.key)
     }
+
+    const handleRequestClick = () => {
+        console.log("sent request to api")
+        setShowRequest(false)
+        notification.open({
+            message: 'Request sent to (username goes here)'
+        });
+    }
+
+    const [ showRequest, setShowRequest] = useState(true)
 
     const renderCurrentTab = () =>{
         switch(currentTab){
@@ -22,10 +33,16 @@ function UserProfile(props){
                 return( <div className="site-layout-content">Circle</div>)
         }
     }
-    
+    const renderRequestButton = () =>{
+        // TODO check if the viewer has the profile in the circle already and reder based on this 
+        if( showRequest)
+            return <Button className="request-btn" onClick={handleRequestClick}>Join Circle</Button>
+    }
+
     return (
         <Layout className="layout">
             <ProfileCard username={props.accountId}/>
+                {renderRequestButton()}
             <Header>
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys={["About"]} >
                     <Menu.Item onClick={handleClick} key="Posts">Posts</Menu.Item>

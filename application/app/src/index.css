@@ -69,6 +69,11 @@ code {
   max-height: 50%;
 }
 
+.ant-btn.request-btn{
+  width: 25%;
+  
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

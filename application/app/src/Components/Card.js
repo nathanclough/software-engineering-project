@@ -7,6 +7,7 @@ const { Meta } = Card;
 function ProfileCard (props) {  
 
  const handleClick = e => {
+   if(props.handleCardClick != null)
    props.handleCardClick(props.accountId)
 }
 return (

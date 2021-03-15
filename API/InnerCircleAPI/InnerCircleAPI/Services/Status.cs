@@ -8,11 +8,8 @@ namespace InnerCircleAPI.Services
 {
     public enum Status
     {
-        [Description("Pending")]
-        Pending = 1,
-        [Description("Accepted")]
-        Accepted = 2,
-        [Description("Denied")]
-        Denied = 3
+        Pending,
+        Accepted,
+        Denied
     }
 }

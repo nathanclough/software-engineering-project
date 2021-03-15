@@ -32,7 +32,7 @@ namespace InnerCircleAPI.Controllers
             {
                 RecepientId = requestDTO.RecepientId,
                 SenderId = requestDTO.SenderId,
-                status = (int)Status.Pending
+                status = Enum.Parse(typeof(Status),requestDTO.Status).ToString()
             };
 
             _context.Requests.Add(request);
@@ -48,7 +48,7 @@ namespace InnerCircleAPI.Controllers
             var requests = await _context.Requests.Include(r => r.status).Select(r => new RequestDTO {
                 SenderId = r.SenderId,
                 RecepientId = r.RecepientId,
-                Status = r.status.value
+                Status = r.status
             }).ToListAsync();
 
             return requests;

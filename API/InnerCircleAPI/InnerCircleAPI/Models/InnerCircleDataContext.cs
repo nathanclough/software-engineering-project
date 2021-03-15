@@ -15,7 +15,6 @@ namespace InnerCircleAPI.Models
         public DbSet<Email> Emails { get; set;  }
         public DbSet<Circle> Circles { get; set; }
         public DbSet<Request> Requests { get; set; }
-        public DbSet<Status> Statuses { get; set; }
 
         public InnerCircleDataContext(DbContextOptions<InnerCircleDataContext> options) : base(options)
         {
