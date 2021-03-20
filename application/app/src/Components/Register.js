@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import logo from '../logo.png';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import '../App.css';
-
 import {
   Form,
   Input,
-  Select,
   Button
 } from 'antd';
-
 import { Link, Redirect } from 'react-router-dom';
 
+// Styles for form 
 const logoFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -51,18 +49,22 @@ const tailFormItemLayout = {
 function Register(props) {
     const [redirect,setRedirect] = useState(null)
     const [form] = Form.useForm();
+
+    // Makes call to API to create an Account
     async function onFinish  (values)  {
 
       const response = await fetch(process.env.REACT_APP_API_URL +"Accounts?", {
         method: 'POST',
-
         headers: {
           'Content-Type': 'application/json',
           
         },
         body:JSON.stringify(values)
         })
-        response.json().then( data => {
+
+      response.json()
+        // On success set state to be new user and redirect
+        .then( data => {
           setRedirect(
             {
               pathname: "/homepage",
@@ -73,7 +75,9 @@ function Register(props) {
                 accountId: data.account.accountId
               }        
             });
-        }).catch( data => { console.log(data.json())});
+        })
+        // On Failure log the error 
+        .catch( data => { console.log(data)});
   };
 
     // If the form is complete and redirect is set route to homepage 

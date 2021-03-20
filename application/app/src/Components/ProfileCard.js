@@ -7,11 +7,13 @@ const { Meta } = Card;
 
 function ProfileCard (props) {  
 
+    // if a click handler was given call it
     const handleClick = e => {
       if(props.handleCardClick != null)
-      props.handleCardClick(props.accountId)
+        props.handleCardClick(props.accountId)
     }
 
+    // Returns the children elements to extend the card such as buttons, links, descriptions,  ect.
     const renderElements = () =>{
       if(props.children != null){
         return props.children 
@@ -25,7 +27,7 @@ function ProfileCard (props) {
             style={{
             fontSize: 12
             }}
-
+            // TODO: Replace the generic avatar with actual links to cloud storage 
           avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
           title={props.username}
           

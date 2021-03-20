@@ -10,28 +10,28 @@ import '../index.css';
 const { Header, Footer, Sider, Content } = Layout;
 
 function Homepage(props){
+    // Holds state variables: accountId, username, token
     var location = useLocation();
-   
-    const content = (
+    const [showUserProfile, setShowUserProfile] = useState({render: false, accountId :0});
+    
+    // Defines hover content for the top left logo
+    const signoutHoverContent = (
       <div>
         <Link to="/">Signout</Link>
       </div>
     );
-
-    const [showUserProfile, setShowUserProfile] = useState({render: false,
-    accountId :0});
-
+    
     const handleShowUserProfile = (bool,accountId) => 
     {
       setShowUserProfile({render: bool, accountId: accountId})
     }
 
+    // Renders a userprofile page based on the showUserProfileState
     const renderUserProfile = ()  =>
     {
       if( showUserProfile.render)
         return <UserProfile accountId={showUserProfile.accountId}/>
     }
-
 
     return(
         <>
@@ -40,20 +40,20 @@ function Homepage(props){
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
           
           {/* Hover to signout  */}
-          <Popover content={content} placement="bottomLeft"
+          <Popover content={signoutHoverContent} placement="bottomLeft"
               title={location.state.username} trigger="hover">
                 <img src={logo} className="logo" />
           </Popover>
           
+          {/* Main menu navigation  */}
           <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-              <Menu.Item key="1">Home</Menu.Item>
-              <Menu.Item key="2">Circle</Menu.Item>
-              <Menu.Item key="3">Messaging</Menu.Item>
+              <Menu.Item key="Home">Home</Menu.Item>
+              <Menu.Item key="Circle">Circle</Menu.Item>
+              <Menu.Item key="Messaging">Messaging</Menu.Item>
           </Menu>
         </Header>
         
         <Layout style={{padding: '75px 0px'}}>
-            
             {/* SideBar */}
             <Sider theme="light"
               breakpoint="lg"
@@ -61,6 +61,7 @@ function Homepage(props){
               style={{ position: 'fixed', zIndex: 1, height: '100%',width: '100%' }}
             >
             <div className="side-bar">
+              {/* Create a search with specifying a handler for when results are clicked */}
               <Search handleShowUserProfile={handleShowUserProfile} className="side-bar search"/>
               <h2>Requests</h2>
             </div>

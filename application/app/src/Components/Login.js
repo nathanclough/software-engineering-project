@@ -7,10 +7,11 @@ import logo from '../logo.png';
 
 function Login (props) {  
     const [redirect,setRedirect] = useState(null);
-    
     const [alert,setAlert] = useState(false);
 
+    // Handles form completion 
     async function onFinish  (values)  {
+      // Make API call to login 
       const response = await fetch(process.env.REACT_APP_API_URL +"login?", {
         method: 'POST',
 
@@ -22,10 +23,12 @@ function Login (props) {
         }).catch( data => { 
           
       });
-        
+      
+      // Once the call back is complete 
       response.json().then( data => {
-        console.log(data)
+        // If we recieve an AUTH token 
         if (data.token != null)
+          // Go to the homepage
           setRedirect(
             {
               pathname: "/homepage",
@@ -38,12 +41,14 @@ function Login (props) {
             })
         else 
            {
+             // Alert user that the login failed 
              setAlert(true)
            }
 
       })
     };
     
+    // Layout styles for the form 
     const formItemLayout = {
       wrapperCol: {
         xs: {
@@ -80,10 +85,12 @@ function Login (props) {
         },
       },
     };
-
+    
+    // Redirect if needed 
     if (redirect != null) {
       return( <Redirect to={redirect} />)
     }
+    // Otherwise render the form 
     return (
       <Form
         name="normal_login"
@@ -94,10 +101,12 @@ function Login (props) {
         onFinish={onFinish}
         {...formItemLayout}
       >
-        <Form.Item{...logoFormItemLayout}>
+        {/* Logo */}
+        <Form.Item {...logoFormItemLayout}>
           <img src={logo} className="App-logo" alt="logo" />
         </Form.Item>
         
+        {/* / Renders the allert if alert is set to true / */}
         {
           alert && (<Alert
           style={{ marginBottom: 24 }}
@@ -107,6 +116,7 @@ function Login (props) {
           closable
         />)}
 
+        {/* // Username Item */}
         <Form.Item
           name="Username"
           rules={[
@@ -118,6 +128,8 @@ function Login (props) {
         >
           <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
         </Form.Item>
+
+        {/* // Password Item  */}
         <Form.Item
           name="Password"
           rules={[
@@ -133,9 +145,9 @@ function Login (props) {
             placeholder="Password"
           />
         </Form.Item>
-  
+
+        {/* // Login button */}
         <Form.Item             {...tailFormItemLayout}>
-          
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
