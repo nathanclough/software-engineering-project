@@ -12,10 +12,12 @@ function ProfileCard (props) {
       props.handleCardClick(props.accountId)
     }
 
-    const renderButton = () =>{
-      if(props.showRequest!= null && props.showRequest)
-        return (<Button className="request-btn" onClick={props.handleRequestClick}>Join Circle</Button>)
+    const renderElements = () =>{
+      if(props.children != null){
+        return props.children 
+      }
     }
+
     return (
       <div className="Card">
       <Card onClick={handleClick}>
@@ -28,7 +30,7 @@ function ProfileCard (props) {
           title={props.username}
           
         />
-        {renderButton()}
+        {renderElements()}
       </Card>
       </div>
     )

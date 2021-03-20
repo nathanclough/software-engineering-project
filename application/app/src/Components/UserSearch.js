@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Input} from 'antd'
 import {SearchOutlined } from '@ant-design/icons'
-import ProfileCard from './Card';
+import ProfileCard from './ProfileCard';
 import {debounce} from 'lodash';
 
 function Search(props){

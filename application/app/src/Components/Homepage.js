@@ -4,7 +4,7 @@ import Search from './UserSearch';
 import UserProfile from './UserProfile';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
-import ProfileCard from './Card';
+import ProfileCard from './ProfileCard';
 import '../index.css';
 
 const { Header, Footer, Sider, Content } = Layout;

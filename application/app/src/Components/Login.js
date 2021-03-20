@@ -33,7 +33,7 @@ function Login (props) {
                 from: props.location, 
                 token: data.token,
                 username: data.account.username,
-                accountID: data.account.accountId
+                accountId: data.account.accountId
               }        
             })
         else 

@@ -70,7 +70,7 @@ function Register(props) {
                 from: props.location, 
                 token: data.token,
                 username: data.account.username.value,
-                accountID: data.account.accountId
+                accountId: data.account.accountId
               }        
             });
         }).catch( data => { console.log(data.json())});
