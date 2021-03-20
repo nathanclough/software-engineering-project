@@ -20,7 +20,7 @@ function UserProfile(props){
             message: 'Request sent to (username goes here)'
         });
     }
-
+    
     const [ showRequest, setShowRequest] = useState(true)
 
     const renderCurrentTab = () =>{
@@ -33,16 +33,10 @@ function UserProfile(props){
                 return( <div className="site-layout-content">Circle</div>)
         }
     }
-    const renderRequestButton = () =>{
-        // TODO check if the viewer has the profile in the circle already and reder based on this 
-        if( showRequest)
-            return <Button className="request-btn" onClick={handleRequestClick}>Join Circle</Button>
-    }
 
     return (
         <Layout className="layout">
-            <ProfileCard username={props.accountId}/>
-                {renderRequestButton()}
+            <ProfileCard username={props.accountId} showRequest={showRequest} handleRequestClick={handleRequestClick}/>
             <Header>
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys={["About"]} >
                     <Menu.Item onClick={handleClick} key="Posts">Posts</Menu.Item>

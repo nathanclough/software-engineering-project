@@ -70,10 +70,13 @@ code {
 }
 
 .ant-btn.request-btn{
-  width: 25%;
-  
+  size: 1ch;
 }
 
 ::-webkit-scrollbar {
   display: none;
 }
+.ant-card-border{
+  width:100%;
+}
+
