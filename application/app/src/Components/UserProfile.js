@@ -64,12 +64,11 @@ function UserProfile(props){
                             SenderId: location.state.accountId }
 
         // Make API call to the /Request endpoint 
-        // TODO: Add Auth headers 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}Requests`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}Request`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              
+              'Authorization': `Bearer ${location.state.token}`
             },
             // Set the Body as string of request 
             body: JSON.stringify(request)

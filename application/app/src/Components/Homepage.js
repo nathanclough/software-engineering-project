@@ -4,7 +4,7 @@ import Search from './UserSearch';
 import UserProfile from './UserProfile';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
-import ProfileCard from './ProfileCard';
+import Requests from './Requests';
 import '../index.css';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -63,7 +63,7 @@ function Homepage(props){
             <div className="side-bar">
               {/* Create a search with specifying a handler for when results are clicked */}
               <Search handleShowUserProfile={handleShowUserProfile} className="side-bar search"/>
-              <h2>Requests</h2>
+              <Requests/>
             </div>
             </Sider>
 

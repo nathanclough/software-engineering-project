@@ -10,6 +10,6 @@ namespace InnerCircleAPI.Models
         public virtual long RequestId { get; set; }
         public virtual long SenderId { get; set; }
         public virtual long RecepientId { get; set; }
-        public virtual string status { get; set; }
+        public virtual string Status { get; set; }
     }
 }

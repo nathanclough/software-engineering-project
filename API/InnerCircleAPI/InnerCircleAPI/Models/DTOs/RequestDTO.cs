@@ -10,5 +10,7 @@ namespace InnerCircleAPI.Models
         public long RecepientId { get; set; }
         public long SenderId { get; set; }
         public string Status { get; set; }
+        public string SenderUsername { get; set; }
+        public string RecepientUsername { get; set; }
     }
 }
