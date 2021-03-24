@@ -18,13 +18,6 @@ function Search(props){
         setSearchArg(event.target.value)
     };
 
-    // Handler user clicking on a resulting card 
-    const handleResultClick = (accountId) =>
-    {
-        // Calls the given prop function for handling ShowUser Profile
-        props.handleShowUserProfile(true,accountId)
-    }
-
     // Makes api call for first 10 users that contain given string 
     const getSearchResults = (username) =>{
         // Call Accounts controller with username parameter 
@@ -59,7 +52,7 @@ function Search(props){
                         { 
                             // Create a ProfileCard for each result passing the result Click handler
                             return (
-                                <ProfileCard handleCardClick={handleResultClick} accountId={result.accountId} value={result} username={result.username}></ProfileCard>)
+                                <ProfileCard handleCardClick={props.handleShowUserProfile} accountId={result.accountId} value={result} username={result.username}></ProfileCard>)
                         } )
                     } </> );
             }

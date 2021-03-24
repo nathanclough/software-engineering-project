@@ -10,7 +10,7 @@ function ProfileCard (props) {
     // if a click handler was given call it
     const handleClick = e => {
       if(props.handleCardClick != null)
-        props.handleCardClick(props.accountId)
+        props.handleCardClick(true,props.accountId)
     }
 
     // Returns the children elements to extend the card such as buttons, links, descriptions,  ect.

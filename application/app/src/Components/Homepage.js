@@ -63,7 +63,7 @@ function Homepage(props){
             <div className="side-bar">
               {/* Create a search with specifying a handler for when results are clicked */}
               <Search handleShowUserProfile={handleShowUserProfile} className="side-bar search"/>
-              <Requests/>
+              <Requests handleShowUserProfile={handleShowUserProfile}/>
             </div>
             </Sider>
 

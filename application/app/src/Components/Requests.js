@@ -2,7 +2,8 @@ import React, { useState, useRef } from 'react';
 import {useLocation} from "react-router-dom";
 import {throttle} from 'lodash';
 import ProfileCard from './ProfileCard';
-import {Button} from 'antd'
+import {Button} from 'antd';
+import {CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 
 function Requests (props){
@@ -11,8 +12,8 @@ function Requests (props){
     const [requests, setRequests] = useState(null)
 
     const requestButton = <>
-                            <Button>Accept</Button>
-                            <Button>Decline</Button>
+                            <Button icon={<CheckOutlined />}>Accept</Button>
+                            <Button danger={true} icon={<CloseOutlined />}></Button>
                         </>
 
     // ping the api every 30 seconds for more requests
@@ -53,7 +54,8 @@ function Requests (props){
                         return ( <ProfileCard 
                                     accountId={result.recepientId} 
                                     username={result.recepientUsername}
-                                    key={i}>
+                                    key={i}
+                                    handleCardClick={props.handleShowUserProfile}>
                                         Pending
                                 </ProfileCard>)
                     else{
@@ -62,7 +64,8 @@ function Requests (props){
                                     username={result.senderUsername}
                                     accountId={result.senderId}
                                     key={i}
-                                    children={requestButton}>
+                                    children={requestButton}
+                                    handleCardClick={props.handleShowUserProfile}>
                                 </ProfileCard>)
                     }
                 } )}
