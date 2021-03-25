@@ -22,8 +22,9 @@ function ProfileCard (props) {
 
     return (
       <div className="Card">
-      <Card onClick={handleClick}>
+      <Card >
         <Meta
+            onClick={handleClick}
             style={{
             fontSize: 12
             }}
