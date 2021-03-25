@@ -21,6 +21,7 @@ namespace InnerCircleAPI.Models
             Password = new Password();
             Username = new Username();
             Email = new Email();
+            Circle = new Circle();
         }
     }
 }

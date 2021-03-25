@@ -15,8 +15,6 @@ function UserProfile(props){
     
     const[account, setAccount] = useState(null);
 
-    const [ showRequest, setShowRequest] = useState(true)
-
     // Makes API call to get information for the account in view
     const RetrieveAccountInfo = async () => {
         // Calls /Accounts/{id}
@@ -26,7 +24,7 @@ function UserProfile(props){
             // Specify body content as json
             headers: {
               'Content-Type': 'application/json',
-              
+              'Authorization': `Bearer ${location.state.token}`
             },
             })
 
@@ -34,6 +32,7 @@ function UserProfile(props){
             // On success
             .then( data =>{
                 // Update account state 
+                console.log(data)
                 setAccount(data)
                 })
             // On Failure 
@@ -42,8 +41,7 @@ function UserProfile(props){
                 console.log(data);
         });
         
-        // This can eventually be set based on an account field
-        setShowRequest(true);
+
 
         // Make api call to get post information
 
@@ -77,8 +75,8 @@ function UserProfile(props){
         response.json()
             // If request is fulfilled
             .then( () => {
-                    // Make the button go away
-                    setShowRequest(false)
+                    // Reload Page
+                    RetrieveAccountInfo()
                     
                     // Create notification confirming request was sent 
                     notification.open({
@@ -106,7 +104,7 @@ function UserProfile(props){
 
     // Creates a button to pass into the ProfileCard
     const RequestButton = () => {
-        if(showRequest)
+        if(account.requestable)
         {
            return <Button className="request-btn" onClick={ handleRequestClick}>Join Circle</Button>
         }
@@ -117,7 +115,7 @@ function UserProfile(props){
         // Render the Page 
         return (
             <Layout className="layout">
-                <ProfileCard username={account.username} children={RequestButton()} showRequest={showRequest} handleRequestClick={handleRequestClick}/>
+                <ProfileCard username={account.username} children={RequestButton()} handleRequestClick={handleRequestClick}/>
                 <Header>
                     <Menu theme="light" mode="horizontal" defaultSelectedKeys={["About"]} >
                         <Menu.Item onClick={handleClick} key="Posts">Posts</Menu.Item>

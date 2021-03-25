@@ -3,9 +3,12 @@ import {Input} from 'antd'
 import {SearchOutlined } from '@ant-design/icons'
 import ProfileCard from './ProfileCard';
 import {debounce} from 'lodash';
+import {useLocation} from "react-router-dom";
+
 
 function Search(props){
-    
+    var location = useLocation();
+
     const [results,setResults] = useState( null)
     const [ searchArg, setSearchArg] = useState("")
 
@@ -21,7 +24,12 @@ function Search(props){
     // Makes api call for first 10 users that contain given string 
     const getSearchResults = (username) =>{
         // Call Accounts controller with username parameter 
-        fetch(`${process.env.REACT_APP_API_URL}Accounts?username=${username}`)
+        fetch(`${process.env.REACT_APP_API_URL}Accounts?username=${username}` , {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${location.state.token}`
+            } })
             // Convert response to json
             .then(response => response.json())
             // set The result set to be the new data 

@@ -53,21 +53,31 @@ namespace InnerCircleAPI.Controllers
         }
 
         // GET: api/Accounts/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AccountDTO>> GetAccount(long id)
         {
-            var account = await _context.Accounts.Include(a => a.Username).SingleOrDefaultAsync( a =>  a.AccountId == id);
+            var viewerUserId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;            
+            var account = await _context.Accounts.Include(a => a.Username).Include(a => a.Circle).SingleOrDefaultAsync( a =>  a.AccountId == id);
 
             if (account == null)
             {
                 return NotFound();
             }
 
+            var pendingRequests = new List<Request>();
+            var inCircle = (account.Circle.Accounts.Where(a => a.AccountId == id).FirstOrDefault() != null);
+            if(!inCircle )
+                pendingRequests = await _context.Requests.Where(r => r.Status == "Pending" && ((r.RecepientId == id && r.SenderId.ToString() == viewerUserId) || (r.RecepientId.ToString() == viewerUserId && r.SenderId == id))).ToListAsync();
+
+
+
             return new AccountDTO {
                 AccountId = account.AccountId,
                 Username = account.Username.Value,
                 FirstName = account.FirstName,
-                LastName = account.LastName
+                LastName = account.LastName,
+                Requestable = !inCircle && pendingRequests.Count == 0 
             };
            
         }

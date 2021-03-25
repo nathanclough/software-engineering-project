@@ -14,5 +14,9 @@ namespace InnerCircleAPI.Models
         public virtual long AccountId { get; set; }
         public virtual Account Account { get; set; }
         public virtual List<Account> Accounts { get; set; }
+        public Circle()
+        {
+            Accounts = new List<Account>();
+        }
     }
 }
