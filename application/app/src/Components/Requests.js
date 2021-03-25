@@ -11,12 +11,18 @@ function Requests (props){
 
     const [requests, setRequests] = useState(null)
 
-    const requestButton = <>
-                            <Button icon={<CheckOutlined />}>Accept</Button>
-                            <Button danger={true} icon={<CloseOutlined />}></Button>
-                        </>
+    const requestButton = (requestId) => {
+        return <>
+            <Button onClick={ (e) => requestResponse(requestId, 'Accepted')} icon={<CheckOutlined />}>Accept</Button>
+            <Button onClick={ (e) => requestResponse(requestId, 'Denied')} danger={true} icon={<CloseOutlined />}></Button>
+        </>
+    } 
+    
+    const requestResponse = (requestId, response) => {
+        console.log(`API call to update request ${requestId} as ${response}`)
+    }
 
-    // ping the api every 30 seconds for more requests
+    // ping the api every 15 seconds for more requests
     const getRequests = useRef(throttle ( async () =>{
         // Make API call to the /Request endpoint 
         console.log("api call");
@@ -55,6 +61,7 @@ function Requests (props){
                                     accountId={result.recepientId} 
                                     username={result.recepientUsername}
                                     key={i}
+                                    requestId={result.requestId}
                                     handleCardClick={props.handleShowUserProfile}>
                                         Pending
                                 </ProfileCard>)
@@ -64,7 +71,8 @@ function Requests (props){
                                     username={result.senderUsername}
                                     accountId={result.senderId}
                                     key={i}
-                                    children={requestButton}
+                                    children={requestButton(result.requestId)}
+                                    requestId={result.requestId}
                                     handleCardClick={props.handleShowUserProfile}>
                                 </ProfileCard>)
                     }
