@@ -14,12 +14,14 @@ namespace InnerCircleAPI.Models
         public string LastName { get; set; }
         public virtual Email Email { get; set; }
         public virtual Password Password { get; set; }
-        public virtual Username Username { get;set; }
+        public virtual Username Username { get; set; }
+        public virtual Circle Circle {get; set;}
         public Account()
         {
             Password = new Password();
             Username = new Username();
             Email = new Email();
+            Circle = new Circle();
         }
     }
 }

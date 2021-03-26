@@ -9,6 +9,8 @@ using InnerCircleAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using InnerCircleAPI.Models.DTOs;
 using InnerCircleAPI.Controllers.ServiceCommon;
+using BC = BCrypt.Net.BCrypt;
+using System.Text.RegularExpressions;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -24,17 +26,9 @@ namespace InnerCircleAPI.Controllers
         {
             _context = context;
             _authManager = authManager;
-
         }
 
-        // GET: api/Accounts1
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
-        {
-            return await _context.Accounts.ToListAsync();
-        }
-
-        // POST: api/Accounts1
+        // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
@@ -42,7 +36,7 @@ namespace InnerCircleAPI.Controllers
             var account = new Account
             {
                 Username = new Username { Value = accountDTO.Username },
-                Password = new Password { Value = accountDTO.Password },
+                Password = new Password { Value = BC.HashPassword(accountDTO.Password) },
                 Email = new Email { Value = accountDTO.Email },
                 FirstName = accountDTO.FirstName,
                 LastName = accountDTO.LastName
@@ -55,64 +49,63 @@ namespace InnerCircleAPI.Controllers
 
             // Create a token for the new account and add to response 
             var tokenString = _authManager.GenerateJSONWebToken(account);
-
             return Ok(new { token = tokenString, account =account });
         }
 
-        // GET: api/Accounts1/5
+        // GET: api/Accounts/5
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(long id)
+        public async Task<ActionResult<AccountDTO>> GetAccount(long id)
         {
-            var account = await _context.Accounts.FindAsync(id);
+            var viewerUserId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;            
+            var account = await _context.Accounts.Include(a => a.Username).Include(a => a.Circle).SingleOrDefaultAsync( a =>  a.AccountId == id);
 
             if (account == null)
             {
                 return NotFound();
             }
 
-            return account;
+            var pendingRequests = new List<Request>();
+            var inCircle = (account.Circle.Accounts.Where(a => a.AccountId == id).FirstOrDefault() != null);
+            if(!inCircle )
+                pendingRequests = await _context.Requests.Where(r => r.Status == "Pending" && ((r.RecepientId == id && r.SenderId.ToString() == viewerUserId) || (r.RecepientId.ToString() == viewerUserId && r.SenderId == id))).ToListAsync();
+
+
+
+            return new AccountDTO {
+                AccountId = account.AccountId,
+                Username = account.Username.Value,
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                Requestable = !inCircle && pendingRequests.Count == 0 
+            };
+           
         }
 
-        // PUT: api/Accounts1/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(long id, Account account)
+        [HttpGet]
+        public async Task<ActionResult<List<AccountDTO>>> GetAccounts(string username)
         {
-            var currentUser = HttpContext.User;
-            int currentUserAccountID;
-            Int32.TryParse(currentUser.Claims.FirstOrDefault(c => c.Type == "AccountID").Value,out currentUserAccountID);
-            if (id != account.AccountId || id != currentUserAccountID)
+            var a = await _context.Accounts.Include(a => a.Username).Where(a => a.Username.Value.Contains(username)).Take(10).Select(a => new AccountDTO
             {
-                return BadRequest();
-            }
+                AccountId = a.AccountId,
+                Username = a.Username.Value,
+                FirstName = a.FirstName,
+                LastName = a.LastName
+            }).ToListAsync();
 
-            _context.Entry(account).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return a;
+            
         }
 
-        // DELETE: api/Accounts1/5
+        // DELETE: api/Accounts/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {
-            var account = await _context.Accounts.FindAsync(id);
+            if (HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value != id.ToString())
+                return Unauthorized();
+
+            var account = await _context.Accounts.SingleOrDefaultAsync(a => a.AccountId == id);
             if (account == null)
             {
                 return NotFound();
@@ -122,11 +115,6 @@ namespace InnerCircleAPI.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool AccountExists(long id)
-        {
-            return _context.Accounts.Any(e => e.AccountId == id);
         }
     }
 }

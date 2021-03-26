@@ -13,6 +13,9 @@ namespace InnerCircleAPI.Models
         public DbSet<Password> Passwords { get; set; }
         public DbSet<Username> Usernames { get; set; }
         public DbSet<Email> Emails { get; set;  }
+        public DbSet<Circle> Circles { get; set; }
+        public DbSet<Request> Requests { get; set; }
+
         public InnerCircleDataContext(DbContextOptions<InnerCircleDataContext> options) : base(options)
         {
 
@@ -20,7 +23,8 @@ namespace InnerCircleAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Account>().HasOne(a => a.Circle)
+                                            .WithOne(c => c.Account);
         }
     }
 }
