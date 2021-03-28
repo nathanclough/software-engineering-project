@@ -71,7 +71,7 @@ function Register(props) {
               state : {
                 from: props.location, 
                 token: data.token,
-                username: data.account.username.value,
+                username: data.account.username,
                 accountId: data.account.accountId
               }        
             });
