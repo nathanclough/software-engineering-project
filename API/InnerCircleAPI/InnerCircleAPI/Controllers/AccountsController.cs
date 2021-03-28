@@ -49,7 +49,7 @@ namespace InnerCircleAPI.Controllers
 
             // Create a token for the new account and add to response 
             var tokenString = _authManager.GenerateJSONWebToken(account);
-            return Ok(new { token = tokenString, account =account });
+            return Ok(new { token = tokenString, account =accountDTO });
         }
 
         // GET: api/Accounts/5
