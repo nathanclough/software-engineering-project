@@ -34,6 +34,7 @@ namespace InnerCircleAPI.Controllers
 
             // Set the value
             post.AccountId = longAccountId;
+            post.Username = _context.Usernames.FirstOrDefault(u => u.AccountID == longAccountId).Value;
 
             // Add the new post 
             _context.Add(post);
@@ -43,7 +44,7 @@ namespace InnerCircleAPI.Controllers
             return Ok(post);
         }
 
-        public async Task<ActionResult<List<Post>>> GetPosts(long accountId)
+        public async Task<ActionResult<List<Post>>> GetPosts(long id)
         {
             // Get the accountId of currentUser
             var stringTokenAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
@@ -51,7 +52,7 @@ namespace InnerCircleAPI.Controllers
             long.TryParse(stringTokenAccountId, out tokenAccountId);
 
             // Get the user account Circle
-            var circle = _context.Circles.FirstOrDefault(c => c.AccountId == accountId);
+            var circle = _context.Circles.FirstOrDefault(c => c.AccountId == id);
 
             // If the account is not in the users circle 
             if(false)//circle.Accounts.Where( a=> a.AccountId == tokenAccountId).ToList().Count < 1)
@@ -62,7 +63,7 @@ namespace InnerCircleAPI.Controllers
             else
             {
                 // Return the posts
-                return await _context.Posts.Where(p => p.AccountId == accountId).ToListAsync();
+                return await _context.Posts.Where(p => p.AccountId == id).ToListAsync();
             }
 
         }

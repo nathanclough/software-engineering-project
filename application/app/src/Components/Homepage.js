@@ -13,7 +13,8 @@ function Homepage(props){
     // Holds state variables: accountId, username, token
     var location = useLocation();
     const [showUserProfile, setShowUserProfile] = useState({render: false, accountId :0});
-    
+    const [currentTab, setCurrentTab]  = useState("Home");
+
     // Defines hover content for the top left logo
     const signoutHoverContent = (
       <div>
@@ -24,7 +25,33 @@ function Homepage(props){
     const handleShowUserProfile = (bool,accountId) => 
     {
       setShowUserProfile({render: bool, accountId: accountId})
+      console.log(showUserProfile)
     }
+
+    // Handles change of UserProfileTab
+    const handleTabChange = e => {
+        setCurrentTab(e.key)
+        setShowUserProfile(false,0)
+    }
+
+    // Returns correct tab to render 
+    // TODO: make corrisponding elements rather than empty divs
+    const renderCurrentTab = () =>{
+      const post = { username: "nathanc", Description: "This is a description of the post", MediaUrl: "../logo.png"}
+      
+      if(showUserProfile.render){
+        return( renderUserProfile())
+      }
+
+      switch(currentTab){
+          case "Home":
+              return( <div className="site-layout-content">Home</div>)
+          case "Account":
+              return( <div className="site-layout-content">Account</div>) 
+          case "Messaging":
+              return( <div className="site-layout-content">Circle</div>)
+      }
+  }
 
     // Renders a userprofile page based on the showUserProfileState
     const renderUserProfile = ()  =>
@@ -47,9 +74,9 @@ function Homepage(props){
           
           {/* Main menu navigation  */}
           <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-              <Menu.Item key="Home">Home</Menu.Item>
-              <Menu.Item key="Circle">Circle</Menu.Item>
-              <Menu.Item key="Messaging">Messaging</Menu.Item>
+              <Menu.Item onClick={handleTabChange} key="Home">Home</Menu.Item>
+              <Menu.Item onClick={handleTabChange} key="Account">Account</Menu.Item>
+              <Menu.Item onClick={handleTabChange} key="Messaging">Messaging</Menu.Item>
           </Menu>
         </Header>
         
@@ -69,7 +96,7 @@ function Homepage(props){
 
             {/* Homepage content */}
             <Content style={{ padding: '2% 15%' }}>
-            {renderUserProfile()}
+            {renderCurrentTab()}
             </Content>
 
         </Layout>

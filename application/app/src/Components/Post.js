@@ -4,11 +4,13 @@ import {Card} from 'antd';
 
 
 function Post(props){
+    var postInfo = props.info
     return (
-        <Card size="small" title={props.username}>
-            <image src={props.MediaUrl}/>
-            <p>{props.Description}</p>
-        </Card>
+        <div style={{padding: 10}}>
+            <Card size="small" title={postInfo.username} cover={<img src={postInfo.MediaUrl}/>}>            
+                <p>{postInfo.description}</p>
+            </Card>
+        </div>
     )
 }
 export default Post;

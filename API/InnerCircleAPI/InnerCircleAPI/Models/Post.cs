@@ -9,6 +9,7 @@ namespace InnerCircleAPI.Models
     {
         public long PostId { get; set; }
         public string MediaUrl { get; set; }
+        public string Username { get; set; }
         public long AccountId { get; set; }
         public string Description { get; set; }
     }

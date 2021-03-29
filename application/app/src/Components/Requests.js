@@ -17,7 +17,7 @@ function Requests (props){
             <Button onClick={ (e) => requestResponse(requestId, 'Denied')} danger={true} icon={<CloseOutlined />}></Button>
         </>
     } 
-    
+
     const requestResponse = (requestId, response) => {
         console.log(`API call to update request ${requestId} as ${response}`)
     }
