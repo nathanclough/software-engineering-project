@@ -66,6 +66,8 @@ namespace InnerCircleAPI.Controllers
             return requests;
         }
 
+        [Route ("respond")]
+        [HttpPost]
         public async Task<Object> RequestResponse(long requestID, string status)
         {
             //Get the response get the request and update
@@ -74,7 +76,7 @@ namespace InnerCircleAPI.Controllers
 
             var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == requestID);
             request.Status = status;
-            _context.Requests.Add(request);
+            _context.Update(request);
             await _context.SaveChangesAsync();
 
             var SenderAccount = await _context.Accounts.FirstOrDefaultAsync(s => request.SenderId == s.AccountId);
@@ -83,15 +85,16 @@ namespace InnerCircleAPI.Controllers
 
             if(request.Status == "Accepted")
             {
-                var SenderCircle = await _context.Circles.FirstOrDefaultAsync(c => request.SenderId == c.AccountId);
+                var SenderCircle = await _context.Circles.Include(c =>c.Accounts).FirstOrDefaultAsync(c => request.SenderId == c.AccountId);
                 SenderCircle.Accounts.Add(RecipientAccount);
-                var RecCircle = await _context.Circles.FirstOrDefaultAsync(c => request.RecepientId == c.AccountId);
+                var RecCircle = await _context.Circles.Include(c =>c.Accounts).FirstOrDefaultAsync(c => request.RecepientId == c.AccountId);
                 RecCircle.Accounts.Add(SenderAccount);
                 await _context.SaveChangesAsync();
+                return Ok();
             }
             else
             {
-
+                return Ok();
             }
 
 
