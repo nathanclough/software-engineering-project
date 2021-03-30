@@ -47,9 +47,9 @@ function Homepage(props){
           case "Home":
               return( <div className="site-layout-content">Home</div>)
           case "Account":
-              return( <div className="site-layout-content">Account</div>) 
+              return( <UserProfile accountId={location.state.accountId}/>) 
           case "Messaging":
-              return( <div className="site-layout-content">Circle</div>)
+              return( <div className="site-layout-content">Messaging</div>)
       }
   }
 
