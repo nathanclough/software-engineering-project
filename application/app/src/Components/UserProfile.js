@@ -25,11 +25,12 @@ function UserProfile(props){
         mounted.current = true;
         RetrieveAccountInfo().then( data => {
             if(mounted.current){
+                console.log("call get account api")
                 setAccount(data)
             }
         })
         return () => mounted.current = false;
-    }, [account])
+    }, [props.accountId])
 
     // Controls API call for posts 
     useEffect( () =>{
@@ -40,7 +41,7 @@ function UserProfile(props){
             }
         })
         return () => mounted.current = false;
-    }, [account])
+    }, [props.accountId])
 
 
     // Makes API call to get information for the account in view

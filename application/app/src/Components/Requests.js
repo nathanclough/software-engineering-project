@@ -20,6 +20,10 @@ function Requests (props){
 
     const requestResponse = (requestId, response) => {
         console.log(`API call to update request ${requestId} as ${response}`)
+        fetch(`${process.env.REACT_APP_API_URL}Request/respond?requestID=${requestId}&status=${response}`, {
+            method: 'POST',
+            headers: {'Authorization': `Bearer ${location.state.token}`}
+        }).then( console.log("success")).catch( data => console.log(data.json()))
     }
 
     // ping the api every 15 seconds for more requests

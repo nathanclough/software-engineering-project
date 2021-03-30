@@ -52,7 +52,8 @@ namespace InnerCircleAPI.Controllers
             {
                 SenderId = r.SenderId,
                 RecepientId = r.RecepientId,
-                Status = r.Status
+                Status = r.Status,
+                RequestId = r.RequestId
                 // Get pending requests involving the given user 
             }).Where(r => (r.SenderId.ToString() == userId || r.RecepientId.ToString() == userId) && r.Status == "Pending").ToListAsync();
 

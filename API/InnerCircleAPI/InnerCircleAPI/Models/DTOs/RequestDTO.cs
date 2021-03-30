@@ -7,6 +7,7 @@ namespace InnerCircleAPI.Models
 {
     public class RequestDTO
     {
+        public long RequestId { get; set; }
         public long RecepientId { get; set; }
         public long SenderId { get; set; }
         public string Status { get; set; }
