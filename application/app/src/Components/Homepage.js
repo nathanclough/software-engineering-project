@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import Search from './UserSearch';
 import UserProfile from './UserProfile';
+import CreatePost from './CreatePost';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import Requests from './Requests';
