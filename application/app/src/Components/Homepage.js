@@ -7,6 +7,7 @@ import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import Requests from './Requests';
 import '../index.css';
+import Item from 'antd/lib/list/Item';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -65,7 +66,7 @@ function Homepage(props){
         <>
     <Layout className="layout">
         {/* Navigation header  */}
-        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%'}}>
           
           {/* Hover to signout  */}
           <Popover content={signoutHoverContent} placement="bottomLeft"
@@ -74,11 +75,14 @@ function Homepage(props){
           </Popover>
           
           {/* Main menu navigation  */}
-          <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
+          <Menu theme="light" mode="horizontal" defaultSelectedKeys={['Home']} >
               <Menu.Item onClick={handleTabChange} key="Home">Home</Menu.Item>
               <Menu.Item onClick={handleTabChange} key="Account">Account</Menu.Item>
               <Menu.Item onClick={handleTabChange} key="Messaging">Messaging</Menu.Item>
+              <Menu.Item><CreatePost/></Menu.Item>
           </Menu>
+          
+
         </Header>
         
         <Layout style={{padding: '75px 0px'}}>
