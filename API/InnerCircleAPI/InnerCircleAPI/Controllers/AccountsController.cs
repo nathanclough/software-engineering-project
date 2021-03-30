@@ -33,23 +33,33 @@ namespace InnerCircleAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
         {
-            var account = new Account
+            // Verify the new account is unique
+            var existingAcct = _context.Usernames.Where(a => a.Value == accountDTO.Username).FirstOrDefault();
+
+            if (existingAcct == null)
             {
-                Username = new Username { Value = accountDTO.Username },
-                Password = new Password { Value = BC.HashPassword(accountDTO.Password) },
-                Email = new Email { Value = accountDTO.Email },
-                FirstName = accountDTO.FirstName,
-                LastName = accountDTO.LastName
+                var account = new Account
+                {
+                    Username = new Username { Value = accountDTO.Username },
+                    Password = new Password { Value = BC.HashPassword(accountDTO.Password) },
+                    Email = new Email { Value = accountDTO.Email },
+                    FirstName = accountDTO.FirstName,
+                    LastName = accountDTO.LastName
 
-            };
-       
-            
-            _context.Accounts.Add(account);
-            await _context.SaveChangesAsync();
+                };
+                
+                _context.Accounts.Add(account);
+                await _context.SaveChangesAsync();
 
-            // Create a token for the new account and add to response 
-            var tokenString = _authManager.GenerateJSONWebToken(account);
-            return Ok(new { token = tokenString, account =accountDTO });
+                accountDTO.AccountId = account.AccountId;
+
+                // Create a token for the new account and add to response 
+                var tokenString = _authManager.GenerateJSONWebToken(account);
+                return Ok(new { token = tokenString, account = accountDTO });
+            }
+            else
+                return BadRequest("Username is already in use");
+
         }
 
         // GET: api/Accounts/5
@@ -67,7 +77,7 @@ namespace InnerCircleAPI.Controllers
 
             var pendingRequests = new List<Request>();
             var inCircle = (account.Circle.Accounts.Where(a => a.AccountId == id).FirstOrDefault() != null);
-            if(!inCircle )
+            if(!inCircle)
                 pendingRequests = await _context.Requests.Where(r => r.Status == "Pending" && ((r.RecepientId == id && r.SenderId.ToString() == viewerUserId) || (r.RecepientId.ToString() == viewerUserId && r.SenderId == id))).ToListAsync();
 
 
@@ -77,7 +87,7 @@ namespace InnerCircleAPI.Controllers
                 Username = account.Username.Value,
                 FirstName = account.FirstName,
                 LastName = account.LastName,
-                Requestable = !inCircle && pendingRequests.Count == 0 
+                Requestable = !inCircle && pendingRequests.Count == 0 && viewerUserId != account.AccountId.ToString()
             };
            
         }

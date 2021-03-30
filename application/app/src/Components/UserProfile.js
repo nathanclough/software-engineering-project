@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Menu, Button, notification} from 'antd';
 import ProfileCard from './ProfileCard';
+import Post from './Post';
 import {useLocation} from "react-router-dom";
 import { getDefaultNormalizer } from '@testing-library/dom';
 
@@ -11,14 +12,41 @@ function UserProfile(props){
     // has accountId, username, and token properties
     var location = useLocation();
     
+    const mounted = useRef(true)
+
     const [currentTab, setCurrentTab]  = useState("About");
     
-    const[account, setAccount] = useState(null);
+    const[account, setAccount] = useState({});
+
+    const[posts, setPosts] = useState([]);
+    
+    // Controls API call for account info 
+    useEffect( () =>{
+        mounted.current = true;
+        RetrieveAccountInfo().then( data => {
+            if(mounted.current){
+                setAccount(data)
+            }
+        })
+        return () => mounted.current = false;
+    }, [account])
+
+    // Controls API call for posts 
+    useEffect( () =>{
+        mounted.current = true;
+        GetPosts().then( data => {
+            if(mounted.current){
+                setPosts(data)
+            }
+        })
+        return () => mounted.current = false;
+    }, [account])
+
 
     // Makes API call to get information for the account in view
     const RetrieveAccountInfo = async () => {
         // Calls /Accounts/{id}
-        const response = await fetch(`${process.env.REACT_APP_API_URL}Accounts/${props.accountId}`, {
+        return fetch(`${process.env.REACT_APP_API_URL}Accounts/${props.accountId}`, {
             method: 'GET',
             
             // Specify body content as json
@@ -26,26 +54,7 @@ function UserProfile(props){
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${location.state.token}`
             },
-            })
-
-        response.json()
-            // On success
-            .then( data =>{
-                // Update account state 
-                console.log(data)
-                setAccount(data)
-                })
-            // On Failure 
-            .catch( data => { 
-                // Log the error
-                console.log(data);
-        });
-        
-
-
-        // Make api call to get post information
-
-
+            }).then(data => data.json()).catch( data => data.json());
     }
 
     // Handles change of UserProfileTab
@@ -75,9 +84,9 @@ function UserProfile(props){
         response.json()
             // If request is fulfilled
             .then( () => {
-                    // Reload Page
-                    RetrieveAccountInfo()
-                    
+                    var act = account
+                    act.requestable = false
+                    setAccount(act)
                     // Create notification confirming request was sent 
                     notification.open({
                         message:   `Request sent to ${account.username}`
@@ -89,14 +98,36 @@ function UserProfile(props){
                 console.log(data);
             });
     }
+
+    const GetPosts = async () => {
+        // Make API call to the /Request endpoint 
+        return fetch(`${process.env.REACT_APP_API_URL}post?id=${props.accountId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${location.state.token}`
+            }
+            })
+            // If request is fulfilled
+            .then( data => 
+                    data.json()
+            )
+            // If request throws error log error to the console
+            .catch( data => { 
+                console.log(data);
+            });
+    }
+
     // Returns correct tab to render 
     // TODO: make corrisponding elements rather than empty divs
     const renderCurrentTab = () =>{
+        const post = { username: "nathanc", Description: "This is a description of the post", MediaUrl: "../logo.png"}
+        
         switch(currentTab){
             case "About":
                 return( <div className="site-layout-content">About</div>)
             case "Posts":
-                return( <div className="site-layout-content">Posts</div>)
+                return( posts.map( (post, i) => {return <Post key={i} info={post}></Post>} )) 
             case "Circle":
                 return( <div className="site-layout-content">Circle</div>)
         }
@@ -109,33 +140,22 @@ function UserProfile(props){
            return <Button className="request-btn" onClick={ handleRequestClick}>Join Circle</Button>
         }
     } 
+    // Render the Page 
+    return (
+        <Layout className="layout">
+            <ProfileCard username={account.username} children={RequestButton()} handleRequestClick={handleRequestClick}/>
+            <Header>
+                <Menu theme="light" mode="horizontal" defaultSelectedKeys={["About"]} >
+                    <Menu.Item onClick={handleClick} key="Posts">Posts</Menu.Item>
+                    <Menu.Item onClick={handleClick} key="Circle">Circle</Menu.Item>
+                    <Menu.Item onClick={handleClick} key="About">About</Menu.Item>
+                </Menu>
+            </Header>
 
-    // If the account is loaded and the Id matches requested id 
-    if(account != null && account.accountId == props.accountId){
-        // Render the Page 
-        return (
-            <Layout className="layout">
-                <ProfileCard username={account.username} children={RequestButton()} handleRequestClick={handleRequestClick}/>
-                <Header>
-                    <Menu theme="light" mode="horizontal" defaultSelectedKeys={["About"]} >
-                        <Menu.Item onClick={handleClick} key="Posts">Posts</Menu.Item>
-                        <Menu.Item onClick={handleClick} key="Circle">Circle</Menu.Item>
-                        <Menu.Item onClick={handleClick} key="About">About</Menu.Item>
-                    </Menu>
-                </Header>
-
-                <Content>
-                    {renderCurrentTab()}
-                </Content>
-            </Layout>
-        );
-    }
-    else{
-        // Make API call 
-        RetrieveAccountInfo()
-        // TODO: Return loading symbol rather than empty div
-        return (<div></div>)
-        
-    } 
+            <Content>
+                {renderCurrentTab()}
+            </Content>
+        </Layout>
+    );
 } 
 export default UserProfile

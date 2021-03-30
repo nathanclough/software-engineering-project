@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import Search from './UserSearch';
 import UserProfile from './UserProfile';
+import CreatePost from './CreatePost';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import Requests from './Requests';
 import '../index.css';
+import Item from 'antd/lib/list/Item';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -13,7 +15,8 @@ function Homepage(props){
     // Holds state variables: accountId, username, token
     var location = useLocation();
     const [showUserProfile, setShowUserProfile] = useState({render: false, accountId :0});
-    
+    const [currentTab, setCurrentTab]  = useState("Home");
+
     // Defines hover content for the top left logo
     const signoutHoverContent = (
       <div>
@@ -24,7 +27,33 @@ function Homepage(props){
     const handleShowUserProfile = (bool,accountId) => 
     {
       setShowUserProfile({render: bool, accountId: accountId})
+      console.log(showUserProfile)
     }
+
+    // Handles change of UserProfileTab
+    const handleTabChange = e => {
+        setCurrentTab(e.key)
+        setShowUserProfile(false,0)
+    }
+
+    // Returns correct tab to render 
+    // TODO: make corrisponding elements rather than empty divs
+    const renderCurrentTab = () =>{
+      const post = { username: "nathanc", Description: "This is a description of the post", MediaUrl: "../logo.png"}
+      
+      if(showUserProfile.render){
+        return( renderUserProfile())
+      }
+
+      switch(currentTab){
+          case "Home":
+              return( <div className="site-layout-content">Home</div>)
+          case "Account":
+              return( <UserProfile accountId={location.state.accountId}/>) 
+          case "Messaging":
+              return( <div className="site-layout-content">Messaging</div>)
+      }
+  }
 
     // Renders a userprofile page based on the showUserProfileState
     const renderUserProfile = ()  =>
@@ -37,7 +66,7 @@ function Homepage(props){
         <>
     <Layout className="layout">
         {/* Navigation header  */}
-        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%'}}>
           
           {/* Hover to signout  */}
           <Popover content={signoutHoverContent} placement="bottomLeft"
@@ -46,11 +75,14 @@ function Homepage(props){
           </Popover>
           
           {/* Main menu navigation  */}
-          <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
-              <Menu.Item key="Home">Home</Menu.Item>
-              <Menu.Item key="Circle">Circle</Menu.Item>
-              <Menu.Item key="Messaging">Messaging</Menu.Item>
+          <Menu theme="light" mode="horizontal" defaultSelectedKeys={['Home']} >
+              <Menu.Item onClick={handleTabChange} key="Home">Home</Menu.Item>
+              <Menu.Item onClick={handleTabChange} key="Account">Account</Menu.Item>
+              <Menu.Item onClick={handleTabChange} key="Messaging">Messaging</Menu.Item>
+              <Menu.Item><CreatePost/></Menu.Item>
           </Menu>
+          
+
         </Header>
         
         <Layout style={{padding: '75px 0px'}}>
@@ -69,7 +101,7 @@ function Homepage(props){
 
             {/* Homepage content */}
             <Content style={{ padding: '2% 15%' }}>
-            {renderUserProfile()}
+            {renderCurrentTab()}
             </Content>
 
         </Layout>
