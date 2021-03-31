@@ -49,7 +49,7 @@ function Homepage(props){
 
       switch(currentTab){
           case "Home":
-              return( <div className="site-layout-content">Home <Post/> </div>)
+              return( <div className="site-layout-content">Home </div>)
           case "Account":
               return( <UserProfile accountId={location.state.accountId}/>) 
           case "Messaging":
