@@ -134,7 +134,7 @@ function UserProfile(props){
                 return( 
                     <div className="site-layout-content">
                         Circle
-                        <UserCircle/>
+                        <UserCircle accountId={props.accountId}/>
                     </div>
                 )
         }

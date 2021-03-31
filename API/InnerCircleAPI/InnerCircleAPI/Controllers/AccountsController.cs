@@ -92,7 +92,9 @@ namespace InnerCircleAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AccountDTO>>> GetCircle(long id){
             var circle = await _context.Circles.Include(c=> c.Members).FirstOrDefaultAsync(a => a.AccountId == id);
-            return circle.Members.Select(c => new AccountDTO { AccountId = c.AccountId, Username = _context.Usernames.FirstOrDefault( u => u.AccountID == c.AccountId).Value }).ToList();
+            if (circle != null)
+                return circle.Members.Select(c => new AccountDTO { AccountId = c.AccountId, Username = _context.Usernames.FirstOrDefault(u => u.AccountID == c.AccountId).Value }).ToList();
+            else return new List<AccountDTO>();
         }
 
         [HttpGet]
