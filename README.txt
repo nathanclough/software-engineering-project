@@ -1,14 +1,32 @@
-software-engineering-project
- Facebook clone with End-to-End-Encryption
-- React Frontend and .net Core API as backend 
- Required Dependencies 
-- Node
-- Visual Studio with .Net 5 packages
+readme.txt
 
-Steps To Run
-1. Open the visual studio solution and start debugging the api (Use IIS for windows machine and safari for mac)
-2. Navigate to folder software-engineering-project\application\app in command line 
-3. Execute command "npm i" 
-4. Execute command "npm run dev" 
+Created homepage layout
+    Homepage.js
 
-New Features 
+Two Additional Features Implemented:
+
+1. Circle
+        - Request friends to join your circle 
+        - Accept friends requests to join your circle
+        - Search for users
+        - Look at a users account profile 
+        - Look at your account profile
+
+    ProfileCard.js
+    Requests,js
+    UserCircle.js
+    UserProfile.js
+    UserSearch.js
+
+2. Posts
+        - Create a new post 
+            - Photo post 
+            - Video post
+            - Text post
+            - Photo and Text post 
+            - Video and Text post 
+        - View posts from other users in your circle 
+        - Tag users in your circle in your post 
+
+    CreatePost.js
+    Post.js
