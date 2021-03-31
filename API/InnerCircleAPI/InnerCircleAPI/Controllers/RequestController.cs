@@ -78,18 +78,28 @@ namespace InnerCircleAPI.Controllers
             var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == requestID);
             request.Status = status;
             _context.Update(request);
-            await _context.SaveChangesAsync();
 
-            var SenderAccount = await _context.Accounts.FirstOrDefaultAsync(s => request.SenderId == s.AccountId);
-            var RecipientAccount = await _context.Accounts.FirstOrDefaultAsync(rec => request.RecepientId == rec.AccountId);
+            var SenderAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(s => request.SenderId == s.AccountId);
+            var RecipientAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(rec => request.RecepientId == rec.AccountId);
 
 
             if(request.Status == "Accepted")
             {
-                var SenderCircle = await _context.Circles.Include(c =>c.Accounts).FirstOrDefaultAsync(c => request.SenderId == c.AccountId);
-                SenderCircle.Accounts.Add(RecipientAccount);
-                var RecCircle = await _context.Circles.Include(c =>c.Accounts).FirstOrDefaultAsync(c => request.RecepientId == c.AccountId);
-                RecCircle.Accounts.Add(SenderAccount);
+                var SenderCircleMember = new CircleMember
+                {
+                    CircleId = RecipientAccount.Circle.CircleId,
+                    AccountId = SenderAccount.AccountId
+                };
+
+                var RecipientCircleMember = new CircleMember
+                {
+                    CircleId = SenderAccount.Circle.CircleId,
+                    AccountId = RecipientAccount.AccountId
+                };
+
+                _context.Add(SenderCircleMember);
+                _context.Add(RecipientCircleMember);
+
                 await _context.SaveChangesAsync();
                 return Ok();
             }

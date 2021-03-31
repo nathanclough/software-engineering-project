@@ -52,10 +52,10 @@ namespace InnerCircleAPI.Controllers
             long.TryParse(stringTokenAccountId, out tokenAccountId);
 
             // Get the user account Circle
-            var circle = _context.Circles.FirstOrDefault(c => c.AccountId == id);
+            var circle = _context.Circles.Include(c => c.Members).FirstOrDefault(c => c.AccountId == id);
 
             // If the account is not in the users circle 
-            if(false)//circle.Accounts.Where( a=> a.AccountId == tokenAccountId).ToList().Count < 1)
+            if(circle.Members.Where( a=> a.AccountId == tokenAccountId).ToList().Count < 1)  
             {
                 // Return Unauthorized
                 return Unauthorized();
