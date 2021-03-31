@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Menu, Button, notification} from 'antd';
 import ProfileCard from './ProfileCard';
+import UserCircle from './UserCircle';
 import Post from './Post';
 import {useLocation} from "react-router-dom";
 import { getDefaultNormalizer } from '@testing-library/dom';
@@ -130,7 +131,12 @@ function UserProfile(props){
             case "Posts":
                 return( posts.map( (post, i) => {return <Post key={i} info={post}></Post>} )) 
             case "Circle":
-                return( <div className="site-layout-content">Circle</div>)
+                return( 
+                    <div className="site-layout-content">
+                        Circle
+                        <UserCircle/>
+                    </div>
+                )
         }
     }
 

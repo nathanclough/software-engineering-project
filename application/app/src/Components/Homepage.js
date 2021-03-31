@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import Search from './UserSearch';
 import UserProfile from './UserProfile';
+import UserCircle from './UserCircle';
 import CreatePost from './CreatePost';
+import Post from './Post';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import Requests from './Requests';
@@ -47,7 +49,7 @@ function Homepage(props){
 
       switch(currentTab){
           case "Home":
-              return( <div className="site-layout-content">Home</div>)
+              return( <div className="site-layout-content">Home <Post/> </div>)
           case "Account":
               return( <UserProfile accountId={location.state.accountId}/>) 
           case "Messaging":
@@ -102,6 +104,7 @@ function Homepage(props){
             {/* Homepage content */}
             <Content style={{ padding: '2% 15%' }}>
             {renderCurrentTab()}
+            
             </Content>
 
         </Layout>
