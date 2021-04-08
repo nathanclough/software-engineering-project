@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { Drawer, Form, Button, Upload, Modal, Mentions} from 'antd';
+import { Drawer, Form, Button, Upload, Modal, Mentions, Input} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Mentions;
@@ -79,55 +79,6 @@ class PicturesWall extends React.Component {
   }
 }
 
-// Function to write post description with or without tagging a user from account circle
-const App = () => {
-  const [form] = Form.useForm();
-
-  const onFinish = async () => {
-    try {
-      const values = await form.validateFields();
-      console.log('Submit:', values);
-    } catch (errInfo) {
-      console.log('Error:', errInfo);
-    }
-  };
-
-  return (
-    <Form form={form} layout="horizontal" onFinish={onFinish}>
-      <Form.Item
-        name="TextPost"
-        label=""
-        labelCol={{
-          span: 2,
-        }}
-        wrapperCol={{
-          span: 30,
-        }}
-        rules={[
-          {
-            required: false,
-          },
-        ]}
-      >
-        {/*Placeholder for mock data usernames, need to connect to database here and return list of user circle*/}
-        <Mentions rows={4} placeholder="Use @ here to tag another user in the post from your circle">
-          <Option value="afc163">afc163</Option>
-          <Option value="zombieJ">zombieJ</Option>
-          <Option value="yesmeck">yesmeck</Option>
-        </Mentions>
-      </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          span: 12,
-          offset: 6,
-        }}
-      >
-        &nbsp;&nbsp;&nbsp;
-      </Form.Item>
-    </Form>
-  );
-};
-
 // Renders create post drawer on homepage component
 class DrawerForm extends React.Component {
   state = { visible: false };
@@ -174,9 +125,19 @@ class DrawerForm extends React.Component {
             <div className="Post">
               <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                   <p>Attach a picture or video</p>
-                  <p><PicturesWall /></p>
-                  <p>Post Description</p>
-                  <p><App /></p>
+                  <PicturesWall />
+                  <Form.Item
+                  name="description"
+                  label="Post Description"
+                  rules={[
+                    {
+                      required: false,
+                      message: 'please enter post description',
+                    },
+                  ]}
+                >
+                  <Input.TextArea rows={4} placeholder="please enter post description" />
+                </Form.Item>
               </div>
             </div>
         </Drawer>
