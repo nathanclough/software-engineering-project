@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnerCircleAPI", "InnerCircleAPI\InnerCircleAPI.csproj", "{A0A683CE-3FE9-483A-9A3B-BBD7BF44D6D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnerCircleAPI", "InnerCircleAPI\InnerCircleAPI.csproj", "{A0A683CE-3FE9-483A-9A3B-BBD7BF44D6D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnerCircleTests", "InnerCircleTests\InnerCircleTests.csproj", "{5C550E8A-85DB-484C-A0BE-358044584F7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A0A683CE-3FE9-483A-9A3B-BBD7BF44D6D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0A683CE-3FE9-483A-9A3B-BBD7BF44D6D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0A683CE-3FE9-483A-9A3B-BBD7BF44D6D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C550E8A-85DB-484C-A0BE-358044584F7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C550E8A-85DB-484C-A0BE-358044584F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C550E8A-85DB-484C-A0BE-358044584F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C550E8A-85DB-484C-A0BE-358044584F7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

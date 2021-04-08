@@ -15,102 +15,44 @@ namespace InnerCircleAPI.Controllers
     public class RequestController : Controller
     {
         private readonly InnerCircleDataContext _context;
+        private readonly RequestService RequestService;
 
         public RequestController(InnerCircleDataContext context)
         {
             _context = context;
+            RequestService = new RequestService(context);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<RequestDTO>> PostRequest(RequestDTO requestDTO)
+        public ActionResult PostRequest(RequestDTO requestDTO)
         {
             if (HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value != requestDTO.SenderId.ToString())
                 return Unauthorized();
-
-            var sender = _context.Usernames.FirstOrDefault(u => u.AccountID == requestDTO.SenderId);
-            var recepient = _context.Usernames.FirstOrDefault(u => u.AccountID == requestDTO.RecepientId);
-
-            var request = new Request
+            else
             {
-                RecepientId = requestDTO.RecepientId,
-                SenderId = requestDTO.SenderId,
-                Status = "Pending"
-            };
-            _context.Requests.Add(request);
-            await _context.SaveChangesAsync();
-            return Ok(requestDTO);
+                RequestService.SaveRequest(requestDTO);
+                return Ok(requestDTO);
+            }
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<RequestDTO>>> GetRequests()
+        public ActionResult<List<RequestDTO>> GetRequests()
         {
-            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
-
-            var requests = await _context.Requests.Select(r => new RequestDTO
-            {
-                SenderId = r.SenderId,
-                RecepientId = r.RecepientId,
-                Status = r.Status,
-                RequestId = r.RequestId
-                // Get pending requests involving the given user 
-            }).Where(r => (r.SenderId.ToString() == userId || r.RecepientId.ToString() == userId) && r.Status == "Pending").ToListAsync();
-
-            foreach (var r in requests)
-            {
-                var recepient = await _context.Usernames.FirstOrDefaultAsync(u => r.RecepientId == u.AccountID);
-                var sender = await _context.Usernames.FirstOrDefaultAsync(u => r.SenderId == u.AccountID);
-                r.SenderUsername = sender.Value;
-                r.RecepientUsername = recepient.Value;
-            }
-            return requests;
+            long userId;
+            long.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value, out userId);          
+            return RequestService.GetRequests(userId);
         }
 
+        [Authorize]
         [Route ("respond")]
         [HttpPost]
-        public async Task<Object> RequestResponse(long requestID, string status)
+        public ActionResult RequestResponse(long requestID, string status)
         {
-            //Get the response get the request and update
-            //If Accepted add users to each others circle list
-            //If Denied Alert Requester that user denied request
-
-            var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == requestID);
-            request.Status = status;
-            _context.Requests.Update(request);
-
-            var SenderAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(s => request.SenderId == s.AccountId);
-            var RecipientAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(rec => request.RecepientId == rec.AccountId);
-
-
-            if(request.Status == "Accepted")
-            {
-                var SenderCircleMember = new CircleMember
-                {
-                    CircleId = RecipientAccount.Circle.CircleId,
-                    AccountId = SenderAccount.AccountId
-                };
-
-                var RecipientCircleMember = new CircleMember
-                {
-                    CircleId = SenderAccount.Circle.CircleId,
-                    AccountId = RecipientAccount.AccountId
-                };
-
-                _context.Add(SenderCircleMember);
-                _context.Add(RecipientCircleMember);
-
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            else
-            {
-                return Ok();
-            }
-
-
+            
+            RequestService.RespondToRequest(requestID, status);
+            return Ok();
         }
-
-
     }
 }
