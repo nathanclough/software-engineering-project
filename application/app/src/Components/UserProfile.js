@@ -56,7 +56,7 @@ function UserProfile(props){
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${location.state.token}`
             },
-            }).then(data => data.json()).catch( data => data.json());
+            }).then(data => data.json()).catch( data => data);
     }
 
     // Handles change of UserProfileTab

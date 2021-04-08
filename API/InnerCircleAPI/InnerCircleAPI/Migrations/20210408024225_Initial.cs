@@ -2,10 +2,55 @@
 
 namespace InnerCircleAPI.Migrations
 {
-    public partial class AddedCircleToAccounts : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Accounts",
+                columns: table => new
+                {
+                    AccountId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accounts", x => x.AccountId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Posts",
+                columns: table => new
+                {
+                    PostId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AccountId = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Posts", x => x.PostId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    RequestId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SenderId = table.Column<long>(type: "bigint", nullable: false),
+                    RecepientId = table.Column<long>(type: "bigint", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.RequestId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Circles",
                 columns: table => new
@@ -17,27 +62,12 @@ namespace InnerCircleAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Circles", x => x.CircleId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Accounts",
-                columns: table => new
-                {
-                    AccountId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CircleId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Accounts", x => x.AccountId);
                     table.ForeignKey(
-                        name: "FK_Accounts_Circles_CircleId",
-                        column: x => x.CircleId,
-                        principalTable: "Circles",
-                        principalColumn: "CircleId",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_Circles_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,9 +130,40 @@ namespace InnerCircleAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CircleMembers",
+                columns: table => new
+                {
+                    CircleMemberId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CircleId = table.Column<long>(type: "bigint", nullable: false),
+                    AccountId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CircleMembers", x => x.CircleMemberId);
+                    table.ForeignKey(
+                        name: "FK_CircleMembers_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CircleMembers_Circles_CircleId",
+                        column: x => x.CircleId,
+                        principalTable: "Circles",
+                        principalColumn: "CircleId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_CircleId",
-                table: "Accounts",
+                name: "IX_CircleMembers_AccountId",
+                table: "CircleMembers",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CircleMembers_CircleId",
+                table: "CircleMembers",
                 column: "CircleId");
 
             migrationBuilder.CreateIndex(
@@ -128,27 +189,24 @@ namespace InnerCircleAPI.Migrations
                 table: "Usernames",
                 column: "AccountID",
                 unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Circles_Accounts_AccountId",
-                table: "Circles",
-                column: "AccountId",
-                principalTable: "Accounts",
-                principalColumn: "AccountId",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Accounts_Circles_CircleId",
-                table: "Accounts");
+            migrationBuilder.DropTable(
+                name: "CircleMembers");
 
             migrationBuilder.DropTable(
                 name: "Emails");
 
             migrationBuilder.DropTable(
                 name: "Passwords");
+
+            migrationBuilder.DropTable(
+                name: "Posts");
+
+            migrationBuilder.DropTable(
+                name: "Requests");
 
             migrationBuilder.DropTable(
                 name: "Usernames");

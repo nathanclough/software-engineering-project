@@ -25,7 +25,11 @@ namespace InnerCircleAPI.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Circle>().HasMany(c => c.Members).WithOne(m => m.Circle);
+            modelBuilder.Entity<Circle>().HasKey(c => c.CircleId);
+
+            modelBuilder.Entity<Circle>().HasMany(c => c.Members)
+                .WithOne(c => c.Circle).HasForeignKey(c => c.CircleId).OnDelete(DeleteBehavior.ClientSetNull);
+            
         }
     }
 }

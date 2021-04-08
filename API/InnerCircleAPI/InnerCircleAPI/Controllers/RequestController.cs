@@ -77,7 +77,7 @@ namespace InnerCircleAPI.Controllers
 
             var request = await _context.Requests.FirstOrDefaultAsync(r => r.RequestId == requestID);
             request.Status = status;
-            _context.Update(request);
+            _context.Requests.Update(request);
 
             var SenderAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(s => request.SenderId == s.AccountId);
             var RecipientAccount = await _context.Accounts.Include(a => a.Circle).FirstOrDefaultAsync(rec => request.RecepientId == rec.AccountId);
