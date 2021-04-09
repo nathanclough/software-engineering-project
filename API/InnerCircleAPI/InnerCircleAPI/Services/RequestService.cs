@@ -17,9 +17,6 @@ namespace InnerCircleAPI.Services
 
         public void SaveRequest(RequestDTO requestDTO)
         {
-            var sender = _context.Usernames.FirstOrDefault(u => u.AccountID == requestDTO.SenderId);
-            var recepient = _context.Usernames.FirstOrDefault(u => u.AccountID == requestDTO.RecepientId);
-
             var request = new Request
             {
                 RecepientId = requestDTO.RecepientId,

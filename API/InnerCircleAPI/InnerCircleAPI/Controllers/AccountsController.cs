@@ -11,6 +11,7 @@ using InnerCircleAPI.Models.DTOs;
 using InnerCircleAPI.Controllers.ServiceCommon;
 using BC = BCrypt.Net.BCrypt;
 using System.Text.RegularExpressions;
+using InnerCircleAPI.Services;
 
 namespace InnerCircleAPI.Controllers
 {
@@ -20,74 +21,57 @@ namespace InnerCircleAPI.Controllers
     {
         private readonly InnerCircleDataContext _context;
         private readonly Authorization _authManager;
-
+        private readonly AccountService AccountService;
 
         public AccountsController(InnerCircleDataContext context, Authorization authManager)
         {
             _context = context;
             _authManager = authManager;
+            AccountService = new AccountService(context);
         }
 
         // POST: api/Accounts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(AccountDTO accountDTO)
+        public ActionResult<Account> PostAccount(AccountDTO accountDTO)
         {
-            // Verify the new account is unique
-            var existingAcct = _context.Usernames.Where(a => a.Value == accountDTO.Username).FirstOrDefault();
-
-            if (existingAcct == null)
+            // Hash the password
+            accountDTO.Password = BC.HashPassword(accountDTO.Password);
+            try
             {
-                var account = new Account
-                {
-                    Username = new Username { Value = accountDTO.Username },
-                    Password = new Password { Value = BC.HashPassword(accountDTO.Password) },
-                    Email = new Email { Value = accountDTO.Email },
-                    FirstName = accountDTO.FirstName,
-                    LastName = accountDTO.LastName
+                // Create account 
+                var account = AccountService.CreateAccount(accountDTO);
 
-                };
-
-                _context.Accounts.Add(account);
-                await _context.SaveChangesAsync();
-
-                accountDTO.AccountId = account.AccountId;
-
-                // Create a token for the new account and add to response 
+                // Generate new token and give response
                 var tokenString = _authManager.GenerateJSONWebToken(account);
+
+                // Change password so it isnt returned and send ok response
+                accountDTO.Password = "";
                 return Ok(new { token = tokenString, account = accountDTO });
             }
-            else
-                return BadRequest("Username is already in use");
-
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }     
         }
 
         // GET: api/Accounts/5
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<AccountDTO>> GetAccount(long id)
+        public ActionResult<AccountDTO> GetAccount(long id)
         {
-            var viewerUserId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
-            var account = await _context.Accounts.Include(a => a.Username).Include(a => a.Circle).SingleOrDefaultAsync(a => a.AccountId == id);
+            long viewerUserId;
+            long.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value, out viewerUserId);
 
+            var account = AccountService.GetAccount(viewerUserId, id);
             if (account == null)
             {
                 return NotFound();
             }
-
-            var pendingRequests = new List<Request>();
-            var inCircle = (account.Circle.Members.Where(a => a.AccountId.ToString() == viewerUserId).FirstOrDefault() != null);
-            if (!inCircle)
-                pendingRequests = await _context.Requests.Where(r => r.Status == "Pending" && ((r.RecepientId == id && r.SenderId.ToString() == viewerUserId) || (r.RecepientId.ToString() == viewerUserId && r.SenderId == id))).ToListAsync();
-            return new AccountDTO {
-                AccountId = account.AccountId,
-                Username = account.Username.Value,
-                FirstName = account.FirstName,
-                LastName = account.LastName,
-                Requestable = !inCircle && pendingRequests.Count == 0 && viewerUserId != account.AccountId.ToString()
-            };
+            else return account;
 
         }
+
         [Route("Circle")]
         [HttpGet]
         public async Task<ActionResult<List<AccountDTO>>> GetCircle(long id){
