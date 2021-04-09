@@ -50,7 +50,6 @@ namespace InnerCircleAPI.Controllers
         [HttpPost]
         public ActionResult RequestResponse(long requestID, string status)
         {
-            
             RequestService.RespondToRequest(requestID, status);
             return Ok();
         }

@@ -47,6 +47,9 @@ namespace InnerCircleAPI.Controllers
 
                 // Change password so it isnt returned and send ok response
                 accountDTO.Password = "";
+
+                // Update the dto with the created account ID 
+                accountDTO.AccountId = account.AccountId;
                 return Ok(new { token = tokenString, account = accountDTO });
             }
             catch(Exception e)

@@ -36,7 +36,6 @@ namespace InnerCircleAPI.Services
                 _context.Accounts.Add(account);
                 _context.SaveChangesAsync();
 
-                accountDTO.AccountId = account.AccountId;
                 return account;
             }
             else
@@ -47,7 +46,7 @@ namespace InnerCircleAPI.Services
 
         public AccountDTO GetAccount(long viewerUserId, long accountId)
         {
-            var account =  _context.Accounts.Include(a => a.Username).Include(a => a.Circle).SingleOrDefault(a => a.AccountId == accountId);
+            var account =  _context.Accounts.Include(a => a.Username).Include(a => a.Circle.Members).SingleOrDefault(a => a.AccountId == accountId);
 
             // If there is no account with the requested account ID
             if (account == null)

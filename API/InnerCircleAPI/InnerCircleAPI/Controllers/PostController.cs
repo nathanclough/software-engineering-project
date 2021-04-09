@@ -1,5 +1,6 @@
 ﻿using InnerCircleAPI.Models;
 using InnerCircleAPI.Models.DTOs;
+using InnerCircleAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,15 +16,17 @@ namespace InnerCircleAPI.Controllers
     public class PostController : Controller
     {
         private readonly InnerCircleDataContext _context;
+        private readonly PostService PostService;
 
         public PostController(InnerCircleDataContext context)
         {
             _context = context;
+            PostService = new PostService(context);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Post>> CreatePost(Post post)
+        public  ActionResult<Post> CreatePost(Post post)
         {
             // Set AccountId to the user AccountId given form auth
             var postAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
@@ -32,40 +35,19 @@ namespace InnerCircleAPI.Controllers
             long longAccountId;
             long.TryParse(postAccountId, out longAccountId);
 
-            // Set the value
-            post.AccountId = longAccountId;
-            post.Username = _context.Usernames.FirstOrDefault(u => u.AccountID == longAccountId).Value;
-
-            // Add the new post 
-            _context.Add(post);
-
-            // Save changes and send OK response 
-            await _context.SaveChangesAsync();
+            // Create the post 
+            post = PostService.CreatePost(post, longAccountId);
             return Ok(post);
         }
 
-        public async Task<ActionResult<List<Post>>> GetPosts(long id)
+        public  ActionResult<List<Post>> GetPosts(long id)
         {
             // Get the accountId of currentUser
             var stringTokenAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
             long tokenAccountId;
             long.TryParse(stringTokenAccountId, out tokenAccountId);
 
-            // Get the user account Circle
-            var circle = _context.Circles.Include(c => c.Members).FirstOrDefault(c => c.AccountId == id);
-
-            // If the account is not in the users circle 
-            if(circle.Members.Where( a=> a.AccountId == tokenAccountId).ToList().Count < 1)  
-            {
-                // Return Unauthorized
-                return Unauthorized();
-            }
-            else
-            {
-                // Return the posts
-                return await _context.Posts.Where(p => p.AccountId == id).ToListAsync();
-            }
-
+            return PostService.GetPosts(tokenAccountId, id);
         }
     }
 }
