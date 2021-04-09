@@ -14,7 +14,7 @@ namespace InnerCircleTests.RequestTests
     public class RequestServiceTests : RequestTest
     {
         public RequestServiceTests() : base (new DbContextOptionsBuilder<InnerCircleDataContext>()
-            .UseSqlite("Filename=InnerCircleDb.db").Options)
+            .UseSqlite("Filename=RequestTest.db").Options)
         {
         }
 

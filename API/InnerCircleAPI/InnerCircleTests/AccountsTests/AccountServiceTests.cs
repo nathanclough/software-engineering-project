@@ -14,7 +14,7 @@ namespace InnerCircleTests.AccountsTests
     public class AccountServiceTests : AccountsTest
     {
         public AccountServiceTests() : base(new DbContextOptionsBuilder<InnerCircleDataContext>()
-            .UseSqlite("Filename=InnerCircleDb.db").Options)
+            .UseSqlite("Filename=AccountTest.db").Options)
         {
         }
         private void CreateAccounts(int count, InnerCircleDataContext context)
