@@ -41,9 +41,9 @@ const get = (resource, token) => {
         .catch(handleError)
 }
 
-const LoginService = {
+const ApiService = {
     post,
     get
 }
 
-export default LoginService
+export default ApiService
