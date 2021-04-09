@@ -3,6 +3,7 @@ import { Alert, Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Link, useLocation, Redirect } from "react-router-dom";
 import logo from '../logo.png';
+import LoginService from '../Services/LoginService'
 
 
 function Login (props) {  
@@ -11,43 +12,30 @@ function Login (props) {
 
     // Handles form completion 
     async function onFinish  (values)  {
-      // Make API call to login 
-      const response = await fetch(process.env.REACT_APP_API_URL +"login?", {
-        method: 'POST',
+      // Login using the service and handle the response inside .then 
+      LoginService.login(values)
+        .then( data =>{
+            // If we recieve an AUTH token 
+            if (data.token != null)
+              // Go to the homepage
+              setRedirect(
+                {
+                  pathname: "/homepage",
+                  state : {
+                    from: props.location, 
+                    token: data.token,
+                    username: data.account.username,
+                    accountId: data.account.accountId
+                  }        
+                })
+            else 
+              {
+                // Alert user that the login failed 
+                setAlert(true)
+              }
+        }) 
+    }
 
-        headers: {
-          'Content-Type': 'application/json',
-          
-        },
-        body:JSON.stringify(values)
-        }).catch( data => { 
-          
-      });
-      
-      // Once the call back is complete 
-      response.json().then( data => {
-        // If we recieve an AUTH token 
-        if (data.token != null)
-          // Go to the homepage
-          setRedirect(
-            {
-              pathname: "/homepage",
-              state : {
-                from: props.location, 
-                token: data.token,
-                username: data.account.username,
-                accountId: data.account.accountId
-              }        
-            })
-        else 
-           {
-             // Alert user that the login failed 
-             setAlert(true)
-           }
-
-      })
-    };
-    
     // Layout styles for the form 
     const formItemLayout = {
       wrapperCol: {
