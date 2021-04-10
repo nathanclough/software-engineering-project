@@ -47,6 +47,39 @@ namespace InnerCircleTests.PostsTests
         }
 
         [Fact]
+        public void GetPosts_ViewerIsTheAccount_ReturnsPosts()
+        {
+            using (var context = new InnerCircleDataContext(ContextOptions))
+            {
+
+                /// Arrange 
+                // Create a post service
+                var postService = new PostService(context);
+
+                //  Create a post for account 1 
+                var post = new Post
+                {
+                    AccountId = 1,
+                    Description = "Post Description",
+                    MediaUrl = "UrlToMedia"
+                };
+
+                // Save post 
+                postService.CreatePost(post, 1);
+
+                /// Act
+                // GetPosts where viewerId and accountId are 1 
+                /// Act 
+                // View account 1's posts as account 2 
+                var posts = postService.GetPosts(1, 1);
+
+                /// Assert
+                // The posts are returned 
+                Assert.True(posts.Count > 0);
+            }
+        }
+
+        [Fact]
         public void GetPosts_ViewerIsInAccountCircle_ReturnsPosts()
         {
             using (var context = new InnerCircleDataContext(ContextOptions))
@@ -71,7 +104,7 @@ namespace InnerCircleTests.PostsTests
                 var posts = postService.GetPosts(2, 1);
 
                 /// Assert 
-                // Ensure post was created 
+                // Make sure correct amount of posts are returned
                 Assert.True(posts.Count >0);
             }
         }
@@ -85,7 +118,7 @@ namespace InnerCircleTests.PostsTests
                 // Create a post service
                 var postService = new PostService(context);
 
-                // From the seed Account 3 is not in Account 1 circle and has posts
+                // From the seed Account 3 has posts and is not in Account 1's circle 
                 
                 /// Act 
                 // Have account 1 try to view account 3 posts 

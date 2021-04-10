@@ -47,7 +47,8 @@ namespace InnerCircleAPI.Controllers
             long tokenAccountId;
             long.TryParse(stringTokenAccountId, out tokenAccountId);
 
-            return PostService.GetPosts(tokenAccountId, id);
+            var posts =  PostService.GetPosts(tokenAccountId, id);
+            return posts;
         }
     }
 }

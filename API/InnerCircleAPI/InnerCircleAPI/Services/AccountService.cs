@@ -34,7 +34,7 @@ namespace InnerCircleAPI.Services
                 };
 
                 _context.Accounts.Add(account);
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 return account;
             }
