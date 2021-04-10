@@ -4,6 +4,7 @@ import {SearchOutlined } from '@ant-design/icons'
 import ProfileCard from './ProfileCard';
 import {debounce} from 'lodash';
 import {useLocation} from "react-router-dom";
+import AccountService from '../Services/AccountService'
 
 
 function Search(props){
@@ -23,22 +24,12 @@ function Search(props){
 
     // Makes api call for first 10 users that contain given string 
     const getSearchResults = (username) =>{
-        // Call Accounts controller with username parameter 
-        fetch(`${process.env.REACT_APP_API_URL}Accounts?username=${username}` , {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${location.state.token}`
-            } })
-            // Convert response to json
-            .then(response => response.json())
-            // set The result set to be the new data 
+        AccountService.GetAccounts(username,location.state.token)
             .then(data => {
                 setResults(data)
             }) 
-            // Handles error 
-            .catch(error => console.log(error))
     }
+    
     // Handles logic of what results to render and when to make Calls
     const renderSearchResults = () => {
         // If we have some results and search bar is not empty

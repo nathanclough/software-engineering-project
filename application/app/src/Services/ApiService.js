@@ -6,7 +6,7 @@ const handleError = data => console.log(data);
 const post = (resource, token, content) => {
     // Encryption of content will happen here 
 
-    return fetch(`${process.env.REACT_APP_API_URL}${resource}}`,
+    return fetch(`${process.env.REACT_APP_API_URL}${resource}`,
         {
             method: 'POST',
             headers:{ 
@@ -24,7 +24,7 @@ const post = (resource, token, content) => {
 }
 
 const get = (resource, token) => {
-    return fetch(`${process.env.REACT_APP_API_URL}${resource}}`,
+    return fetch(`${process.env.REACT_APP_API_URL}${resource}`,
         {
             method: 'GET',
             headers:{ 

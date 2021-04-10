@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 import { List } from 'antd';
 import ProfileCard from './ProfileCard';
 import {useLocation} from "react-router-dom";
+import AccountService from '../Services/AccountService';
 
 function UserCircle (props) {  
   const [circle,setCircle] = useState([])
@@ -15,27 +16,13 @@ function UserCircle (props) {
   // Controls API call for posts 
   useEffect( () =>{
     mounted.current = true;
-    GetCircle().then( data => {
+    AccountService.GetAccountCircle(props.accountId, location.state.token).then( data => {
         if(mounted.current){
             setCircle(data)
         }
     })
     return () => mounted.current = false;
     }, [props.accountId])
-
-  // Makes API call to get information for the account in view
-  const GetCircle = async () => {
-    // Calls /Accounts/{id}
-    return fetch(`${process.env.REACT_APP_API_URL}Accounts/Circle?id=${props.accountId}`, {
-        method: 'GET',
-        
-        // Specify body content as json
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${location.state.token}`
-        },
-        }).then(data => data.json()).catch( data => data.json());
-  }
 
   return (
     <List

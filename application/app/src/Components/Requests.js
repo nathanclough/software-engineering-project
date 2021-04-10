@@ -4,6 +4,7 @@ import {throttle} from 'lodash';
 import ProfileCard from './ProfileCard';
 import {Button} from 'antd';
 import {CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import RequestService from '../Services/RequestService'
 
 
 function Requests (props){
@@ -20,23 +21,15 @@ function Requests (props){
 
     const requestResponse = (requestId, response) => {
         console.log(`API call to update request ${requestId} as ${response}`)
-        fetch(`${process.env.REACT_APP_API_URL}Request/respond?requestID=${requestId}&status=${response}`, {
-            method: 'POST',
-            headers: {'Authorization': `Bearer ${location.state.token}`}
-        }).then( console.log("success")).catch( data => console.log(data.json()))
-    }
+        RequestService.RespondToRequest(requestId,response,location.state.token)
+            .then( setRequests(requests.filter(r => r.requestId != requestId)))
+         }
 
     // ping the api every 15 seconds for more requests
     const getRequests = useRef(throttle ( async () =>{
         // Make API call to the /Request endpoint 
         console.log("api call");
-        const response = await fetch(`${process.env.REACT_APP_API_URL}Request`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${location.state.token}`
-            }
-            }).then(response => response.json())
+        RequestService.GetRequests(location.state.token)
             // set The result set to be the new data 
             .then(data => {
                 setRequests(data)

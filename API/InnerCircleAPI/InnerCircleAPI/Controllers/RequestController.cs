@@ -51,7 +51,7 @@ namespace InnerCircleAPI.Controllers
         public ActionResult RequestResponse(long requestID, string status)
         {
             RequestService.RespondToRequest(requestID, status);
-            return Ok();
+            return Ok(requestID);
         }
     }
 }

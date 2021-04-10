@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../logo.png';
+import AccountService from '../Services/AccountService'
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
 import '../App.css';
 import {
@@ -53,31 +54,19 @@ function Register(props) {
     // Makes call to API to create an Account
     async function onFinish  (values)  {
 
-      const response = await fetch(process.env.REACT_APP_API_URL +"Accounts?", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          
-        },
-        body:JSON.stringify(values)
-        })
-
-      response.json()
-        // On success set state to be new user and redirect
-        .then( data => {
-          setRedirect(
-            {
-              pathname: "/homepage",
-              state : {
-                from: props.location, 
-                token: data.token,
-                username: data.account.username,
-                accountId: data.account.accountId
-              }        
-            });
-        })
-        // On Failure log the error 
-        .catch( data => { console.log(data)});
+        AccountService.PostAccount(values)
+          .then( data => {
+            setRedirect(
+              {
+                pathname: "/homepage",
+                state : {
+                  from: props.location, 
+                  token: data.token,
+                  username: data.account.username,
+                  accountId: data.account.accountId
+                }        
+              });
+          })
   };
 
     // If the form is complete and redirect is set route to homepage 

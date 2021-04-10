@@ -34,16 +34,16 @@ namespace InnerCircleAPI.Services
             // Get the user account Circle
             var circle = _context.Circles.Include(c => c.Members).FirstOrDefault(c => c.AccountId == accountId);
 
-            // If the account is not in the users circle 
-            if (circle.Members.Where(a => a.AccountId == viewerAccountId).ToList().Count < 1)
+            // If the account is not in the users circle and account in view is not users account  
+            if (circle.Members.Where(a => a.AccountId == viewerAccountId).ToList().Count > 0 || (accountId == viewerAccountId))
             {
-                // Return Empty list
-                return new List<Post>();
+                // Return the posts
+                return _context.Posts.Where(p => p.AccountId == accountId).ToList();
             }
             else
             {
-                // Return the posts
-                return  _context.Posts.Where(p => p.AccountId == accountId).ToList();
+                // Return Empty list
+                return new List<Post>();
             }
         }
     }

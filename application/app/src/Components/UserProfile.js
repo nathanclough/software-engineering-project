@@ -4,6 +4,9 @@ import ProfileCard from './ProfileCard';
 import UserCircle from './UserCircle';
 import Post from './Post';
 import {useLocation} from "react-router-dom";
+import AccountService from '../Services/AccountService'
+import RequestService from '../Services/RequestService'
+import PostService from '../Services/PostService'
 import { getDefaultNormalizer } from '@testing-library/dom';
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -24,7 +27,9 @@ function UserProfile(props){
     // Controls API call for account info 
     useEffect( () =>{
         mounted.current = true;
-        RetrieveAccountInfo().then( data => {
+        AccountService.GetAccount(props.accountId, location.state.token)
+        //RetrieveAccountInfo()
+        .then( data => {
             if(mounted.current){
                 console.log("call get account api")
                 setAccount(data)
@@ -36,28 +41,13 @@ function UserProfile(props){
     // Controls API call for posts 
     useEffect( () =>{
         mounted.current = true;
-        GetPosts().then( data => {
+        PostService.getPosts(props.accountId,location.state.token).then( data => {
             if(mounted.current){
                 setPosts(data)
             }
         })
         return () => mounted.current = false;
     }, [props.accountId])
-
-
-    // Makes API call to get information for the account in view
-    const RetrieveAccountInfo = async () => {
-        // Calls /Accounts/{id}
-        return fetch(`${process.env.REACT_APP_API_URL}Accounts/${props.accountId}`, {
-            method: 'GET',
-            
-            // Specify body content as json
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${location.state.token}`
-            },
-            }).then(data => data.json()).catch( data => data);
-    }
 
     // Handles change of UserProfileTab
     const handleClick = e => {
@@ -71,53 +61,19 @@ function UserProfile(props){
         // Create the request body to a requestDTO   
         const request = { RecepientId:account.accountId,
                             SenderId: location.state.accountId }
-
-        // Make API call to the /Request endpoint 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}Request`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${location.state.token}`
-            },
-            // Set the Body as string of request 
-            body: JSON.stringify(request)
-            })
-
-        response.json()
-            // If request is fulfilled
-            .then( () => {
-                    var act = account
-                    act.requestable = false
-                    setAccount(act)
-                    // Create notification confirming request was sent 
-                    notification.open({
-                        message:   `Request sent to ${account.username}`
-                    });
-                }
-            )
-            // If request throws error log error to the console
-            .catch( data => { 
-                console.log(data);
-            });
-    }
-
-    const GetPosts = async () => {
-        // Make API call to the /Request endpoint 
-        return fetch(`${process.env.REACT_APP_API_URL}post?id=${props.accountId}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${location.state.token}`
+        // Send the request 
+        RequestService.SendRequest(request,location.state.token)
+        .then( () => {
+                var act = account
+                act.requestable = false
+                setAccount(act)
+                
+                // Create notification confirming request was sent 
+                notification.open({
+                    message:   `Request sent to ${account.username}`
+                });
             }
-            })
-            // If request is fulfilled
-            .then( data => 
-                    data.json()
-            )
-            // If request throws error log error to the console
-            .catch( data => { 
-                console.log(data);
-            });
+        )
     }
 
     // Returns correct tab to render 
