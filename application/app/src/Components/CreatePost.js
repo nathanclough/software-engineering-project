@@ -1,111 +1,108 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Drawer, Form, Button, Upload, Modal, Mentions, Input} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Drawer, Form, Button, Mentions, message, Upload, loading} from 'antd';
+import { PlusOutlined , LoadingOutlined} from '@ant-design/icons';
+import Media from './Media';
 
-const { Option } = Mentions;
+const { Option, getMentions } = Mentions;
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
+// Renders create post drawer on homepage component
+function CreatePost (props) { 
 
-// Class and functions to upload image or video
-class PicturesWall extends React.Component {
-  state = {
-    previewVisible: false,
-    previewImage: '',
-    previewTitle: '',
-    fileList: [
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-    ],
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bytes, setBytes] = useState(null);
+
+  const showDrawer = () => {
+    setVisible(true);
   };
 
-  handleCancel = () => this.setState({ previewVisible: false });
+  const onClose = () => {
+    setVisible(false);
+  };
 
-  handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const [form] = Form.useForm();
+
+  const onReset = () => {
+    form.resetFields();
+  };
+
+  const onFinish = async () => {
+    try {
+      const values = await form.validateFields();
+      console.log('Submit:', values);
+      console.log(bytes);
+
+      
+    } catch (errInfo) {
+      console.log('Error:', errInfo);
     }
-
-    this.setState({
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
+  const  beforeUpload = (file) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
 
-  render() {
-    const { previewVisible, previewImage, fileList, previewTitle } = this.state;
+  const checkMention = async (_, value) => {
+    const mentions = getMentions(value);
+
+    if (mentions.length < 2) {
+      throw new Error('More than one must be selected!');
+    }
+  };
+
+  const getBase64 = (file, callback) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+    };
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const handleChange = info => {
+      if (info.file.status === 'uploading') {
+        setLoading(true);
+        return;
+      }
+      if (info.file.status === 'done') {
+        // Get this url from response in real world.
+        getBase64(info.file, (imageUrl) =>{
+          setBytes(imageUrl)
+          setLoading(false)},
+        );
+      }
+    };
+
+
+
     const uploadButton = (
       <div>
-        <PlusOutlined />
+        {loading ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    return (
-      <>
-        <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
-        <Modal
-          visible={previewVisible}
-          title={previewTitle}
-          footer={null}
-          onCancel={this.handleCancel}
-        >
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-      </>
-    );
-  }
-}
 
-// Renders create post drawer on homepage component
-class DrawerForm extends React.Component {
-  state = { visible: false };
-
-  showDrawer = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  onClose = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <Button type="primary" onClick={this.showDrawer}>
-          <PlusOutlined /> New Post
-        </Button>
-        <Drawer
+  return (
+    <div className="Post">
+      <Button type="primary" onClick={showDrawer}>
+        <PlusOutlined /> New Post
+      </Button>
+      <Drawer
           title="Create a New Post"
           width={720}
-          onClose={this.onClose}
-          visible={this.state.visible}
+          onClose={onClose}
+          visible={visible}
           bodyStyle={{ paddingBottom: 80 }}
           footer={
             <div
@@ -113,44 +110,49 @@ class DrawerForm extends React.Component {
                 textAlign: 'right',
               }}
             >
-              <Button onClick={this.onClose} style={{ marginRight: 8 }}>
-                Cancel
+              <Button onClick={onReset} style={{ marginRight: 8 }}>
+                Reset
               </Button>
-              <Button onClick={this.onClose} type="primary">
+              <Button onClick={onFinish} type="primary">
+                {/*WHERE YOU SUBMIT*/}
                 Post to Circle
               </Button>
             </div>
           }
         >
+        <Form form={form}>
             <div className="Post">
               <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                   <p>Attach a picture or video</p>
-                  <PicturesWall />
+                  
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    customRequest={({ file, onSuccess }) => {
+                      setTimeout(() => {
+                        onSuccess("ok");
+                      }, 0);
+                    }}
+                    className="avatar-uploader"
+                    showUploadList={true}
+                    beforeUpload={beforeUpload}
+                    onChange={handleChange}
+                  >
+                      {bytes ? <img src={bytes} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                  </Upload>
                   <Form.Item
                   name="description"
                   label="Post Description"
-                  rules={[
-                    {
-                      required: false,
-                      message: 'please enter post description',
-                    },
-                  ]}
                 >
-                  <Input.TextArea rows={4} placeholder="please enter post description" />
+                  <Mentions rows={3} placeholder="You can use @ to ref user here">
+                    <Option value="friend">friend</Option>
+                  </Mentions>
+                  {/*<Input.TextArea rows={4} placeholder="please enter post description"/>*/}
                 </Form.Item>
               </div>
             </div>
+        </Form>
         </Drawer>
-      </>
-    );
-  }
-}
-
-function CreatePost (props) { 
-
-  return (
-    <div className="Post">
-        <p><DrawerForm /></p>
     </div>
   )
 };
