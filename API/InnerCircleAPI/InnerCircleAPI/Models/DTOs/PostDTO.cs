@@ -7,5 +7,11 @@ namespace InnerCircleAPI.Models.DTOs
 {
     public class PostDTO
     {
+        public long PostId { get; set; }
+        public Byte [] Bytes { get; set; }
+        public string MediaExtension { get; set; }
+        public string MediaUrl { get; set; }
+        public string Username { get; set; }
+        public string Description { get; set; }
     }
 }

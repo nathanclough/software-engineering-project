@@ -4,6 +4,7 @@ using InnerCircleAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -128,6 +129,18 @@ namespace InnerCircleTests.PostsTests
                 // Ensure post was created 
                 Assert.True(posts.Count == 0);
             }
+        }
+
+        [Fact]
+        public void UploadMediaToBlob_BytesAndExtension_MediaIsUploaded()
+        {
+            using (var context = new InnerCircleDataContext(ContextOptions))
+            {
+                var postService = new PostService(context);
+                
+                postService.UploadMediaToBlob(File.ReadAllBytes("C:\\Users\\nathanc\\Documents\\NotificationsTODO.txt"),".txt");
+            }
+
         }
 
     }

@@ -33,9 +33,7 @@ const get = (resource, token) => {
             },
         })
         .then(data =>{ 
-            data = data.json()
-            // Here is where the decryption will happen 
-
+            data = data.json() 
             return data;
         })
         .catch(handleError)

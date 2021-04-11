@@ -26,7 +26,7 @@ namespace InnerCircleAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        public  ActionResult<Post> CreatePost(Post post)
+        public  ActionResult<Post> CreatePost(PostDTO postDto)
         {
             // Set AccountId to the user AccountId given form auth
             var postAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
@@ -34,6 +34,14 @@ namespace InnerCircleAPI.Controllers
             // Parse the string claim for a long value
             long longAccountId;
             long.TryParse(postAccountId, out longAccountId);
+
+            var post = new Post
+            {
+                MediaUrl = PostService.UploadMediaToBlob(postDto.Bytes,postDto.MediaExtension),
+                Description = postDto.Description,
+            };
+
+            
 
             // Create the post 
             post = PostService.CreatePost(post, longAccountId);

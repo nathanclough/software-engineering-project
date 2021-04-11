@@ -3,7 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace InnerCircleAPI.Services
 {
@@ -45,6 +48,25 @@ namespace InnerCircleAPI.Services
                 // Return Empty list
                 return new List<Post>();
             }
+        }
+
+        public string UploadMediaToBlob(Byte [] bytes, string mediaExtension)
+        {
+            string connectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+
+            BlobContainerClient containerClient =  blobServiceClient.GetBlobContainerClient("media");
+
+            var blobName = $"{Guid.NewGuid()}{mediaExtension}";
+
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+            
+            using MemoryStream memoryStream = new MemoryStream(bytes, writable: false);
+            {
+                var response = blobClient.Upload(memoryStream);
+                return blobName;
+            }
+            
         }
     }
 }
