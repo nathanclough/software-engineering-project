@@ -75,10 +75,40 @@ namespace InnerCircleAPI.Services
             var matches = Regex.Match(dataUrl, @"data:(?<type>.+?),(?<data>.+)");
             var base64 = matches.Groups["data"].Value;
             var mediaType = matches.Groups["type"].Value;
+            
+            string extension = "";
+            
+            if(mediaType.Contains("image"))
+            {
+                if(mediaType.Contains("jpeg"))
+                {
+                    extension = ".jpg";
+                }
+                else if (mediaType.Contains("png"))
+                {
+                    extension= ".png";
+                }
+                else
+                {
+                    throw new Exception($"image media type {mediaType} is not supported");
+                }
+            }
+
+            else if (mediaType.Contains("video"))
+            {
+                if (mediaType.Contains("mp4"))
+                {
+                    extension = ".mp4";
+                }
+                else {
+                    throw new Exception($"video media type {mediaType} is not supported");
+                }
+            }
+
 
             return new Dictionary<string, string>() {
                 { "data", base64 },
-                { "extension", ".jpg"}
+                { "extension", extension}
             };
         }
     }

@@ -131,20 +131,20 @@ namespace InnerCircleTests.PostsTests
             }
         }
 
-        [Fact]
-        public void UploadMediaToBlob_BytesAndExtension_MediaIsUploaded()
-        {
-            using (var context = new InnerCircleDataContext(ContextOptions))
-            {
-                var postService = new PostService(context);
+        //[Fact]
+        //public void UploadMediaToBlob_BytesAndExtension_MediaIsUploaded()
+        //{
+        //    using (var context = new InnerCircleDataContext(ContextOptions))
+        //    {
+        //        var postService = new PostService(context);
                 
-                postService.UploadMediaToBlob(File.ReadAllBytes("C:\\Users\\nathanc\\Documents\\NotificationsTODO.txt"),".txt");
-            }
+        //        postService.UploadMediaToBlob(File.ReadAllBytes("C:\\Users\\nathanc\\Documents\\NotificationsTODO.txt"),".txt");
+        //    }
 
-        }
+        //}
 
         [Fact]
-        public void ParseDataURL_GivenValidURL_ReturnsDictionary()
+        public void ParseDataURL_GivenValidJpegURL_ReturnsDictionary()
         {
             using (var context = new InnerCircleDataContext(ContextOptions))
             {
@@ -161,7 +161,51 @@ namespace InnerCircleTests.PostsTests
                 /// Assert 
                 // Ensure no exception is thrown when converting the string and the image type is correct  
                 Assert.Null(exception);
-                Assert.True("image/jpeg;base64" == result["type"]);
+                Assert.True(".jpg" == result["extension"]);
+            }
+        }
+
+        [Fact]
+        public void ParseDataURL_GivenValidPngUrl_ReturnsDictionary()
+        {
+            using (var context = new InnerCircleDataContext(ContextOptions))
+            {
+                /// Arrange 
+                // Get post service 
+                var postService = new PostService(context);
+                // Get media url to convert 
+                var mediaUrl = "data:image/png;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/4U+eRXhpZgAATU0AKgAAAAgADwALAAIAAAAmAAAIzgEPAAIAAAASAAAI9AEQAAIAAAAMAAAJBgESAAMA";
+                /// Act 
+                // Convert the media url 
+                var result = postService.ParseDataURL(mediaUrl);
+                var exception = Record.Exception(() => Convert.FromBase64String(result["data"]));
+
+                /// Assert 
+                // Ensure no exception is thrown when converting the string and the image type is correct  
+                Assert.Null(exception);
+                Assert.True(".png" == result["extension"]);
+            }
+        }
+
+        [Fact]
+        public void ParseDataURL_GivenValidMp4Url_ReturnsDictionary()
+        {
+            using (var context = new InnerCircleDataContext(ContextOptions))
+            {
+                /// Arrange 
+                // Get post service 
+                var postService = new PostService(context);
+                // Get media url to convert 
+                var mediaUrl = "data:video/mp4;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/4U+eRXhpZgAATU0AKgAAAAgADwALAAIAAAAmAAAIzgEPAAIAAAASAAAI9AEQAAIAAAAMAAAJBgESAAMA";
+                /// Act 
+                // Convert the media url 
+                var result = postService.ParseDataURL(mediaUrl);
+                var exception = Record.Exception(() => Convert.FromBase64String(result["data"]));
+
+                /// Assert 
+                // Ensure no exception is thrown when converting the string and the image type is correct  
+                Assert.Null(exception);
+                Assert.True(".mp4" == result["extension"]);
             }
         }
 
