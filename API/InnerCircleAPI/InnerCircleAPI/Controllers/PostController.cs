@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace InnerCircleAPI.Controllers
@@ -31,13 +32,16 @@ namespace InnerCircleAPI.Controllers
             // Set AccountId to the user AccountId given form auth
             var postAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
 
+            var Media = PostService.ParseDataURL(postDto.Bytes);
+            var bytes = Convert.FromBase64String(Media["data"]);
+
             // Parse the string claim for a long value
             long longAccountId;
             long.TryParse(postAccountId, out longAccountId);
 
             var post = new Post
             {
-                MediaUrl = PostService.UploadMediaToBlob(postDto.Bytes,postDto.MediaExtension),
+                MediaUrl = PostService.UploadMediaToBlob(bytes,Media["extension"]),
                 Description = postDto.Description,
             };
 

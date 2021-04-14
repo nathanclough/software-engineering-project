@@ -5,7 +5,7 @@ const handleError = data => console.log(data);
 
 const post = (resource, token, content) => {
     // Encryption of content will happen here 
-
+    console.log(JSON.stringify(content))
     return fetch(`${process.env.REACT_APP_API_URL}${resource}`,
         {
             method: 'POST',

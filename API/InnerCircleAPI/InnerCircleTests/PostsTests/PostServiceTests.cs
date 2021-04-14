@@ -143,5 +143,27 @@ namespace InnerCircleTests.PostsTests
 
         }
 
+        [Fact]
+        public void ParseDataURL_GivenValidURL_ReturnsDictionary()
+        {
+            using (var context = new InnerCircleDataContext(ContextOptions))
+            {
+                /// Arrange 
+                // Get post service 
+                var postService = new PostService(context);
+                // Get media url to convert 
+                var mediaUrl = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/4U+eRXhpZgAATU0AKgAAAAgADwALAAIAAAAmAAAIzgEPAAIAAAASAAAI9AEQAAIAAAAMAAAJBgESAAMA";
+                /// Act 
+                // Convert the media url 
+                var result = postService.ParseDataURL(mediaUrl);
+                var exception = Record.Exception(() => Convert.FromBase64String(result["data"]));
+
+                /// Assert 
+                // Ensure no exception is thrown when converting the string and the image type is correct  
+                Assert.Null(exception);
+                Assert.True("image/jpeg;base64" == result["type"]);
+            }
+        }
+
     }
 }

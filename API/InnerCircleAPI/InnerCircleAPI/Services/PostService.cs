@@ -7,6 +7,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace InnerCircleAPI.Services
 {
@@ -67,6 +68,18 @@ namespace InnerCircleAPI.Services
                 return blobName;
             }
             
+        }
+
+        public Dictionary<string,string> ParseDataURL(string dataUrl)
+        {
+            var matches = Regex.Match(dataUrl, @"data:(?<type>.+?),(?<data>.+)");
+            var base64 = matches.Groups["data"].Value;
+            var mediaType = matches.Groups["type"].Value;
+
+            return new Dictionary<string, string>() {
+                { "data", base64 },
+                { "extension", ".jpg"}
+            };
         }
     }
 }

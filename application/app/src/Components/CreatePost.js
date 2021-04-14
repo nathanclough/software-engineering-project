@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Drawer, Form, Button, Mentions, message, Upload} from 'antd';
 import { PlusOutlined , LoadingOutlined} from '@ant-design/icons';
+import PostService from '../Services/PostService'
+import {useLocation} from "react-router-dom";
+
 
 const { Option, getMentions } = Mentions;
 
 // Renders create post drawer on homepage component
 function CreatePost (props) { 
 
+  var location = useLocation();
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
@@ -26,6 +30,8 @@ function CreatePost (props) {
 
       // Call the service funciton with values as parameter
       console.log('Submit:', values);
+
+      PostService.createPost(values,location.state.token)
       onCancel()
       
     } catch (errInfo) {
