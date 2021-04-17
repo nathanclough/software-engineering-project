@@ -31,9 +31,11 @@ namespace InnerCircleAPI.Controllers
         {
             // Set AccountId to the user AccountId given form auth
             var postAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;
-
-            var Media = PostService.ParseDataURL(postDto.Bytes);
-            var bytes = Convert.FromBase64String(Media["data"]);
+            if (postDto.Bytes != null)
+            {
+                var Media = PostService.ParseDataURL(postDto.Bytes);
+                var bytes = Convert.FromBase64String(Media["data"]);
+            }
 
             // Parse the string claim for a long value
             long longAccountId;

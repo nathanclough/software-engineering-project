@@ -116,9 +116,9 @@ function CreatePost (props) {
                   </Upload>
                   </Form.Item>
                   <Form.Item
-                  name="description"
-                  label="Post Description"
-                >
+                    name="description"
+                    label="Post Description"
+                  >
                   <Mentions rows={3} placeholder="You can use @ to ref user here">
                     <Option value="friend">friend</Option>
                   </Mentions>

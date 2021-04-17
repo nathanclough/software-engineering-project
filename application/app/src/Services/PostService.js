@@ -39,24 +39,35 @@ const getPosts = (id, token) => {
         .then( data => {
             // Get bytes from the blob url then decrypt them 
             data.forEach(post => {
+                if (post.mediaUrl != null) {
+                    post.mediaUrl = decryptDataUrl(post.mediaUrl)  
+                }
                 post.description = decrypt(post.description)
-                post.mediaUrl = decryptDataUrl(post.mediaUrl)  
             })
             return data
             })
 }
 
 const createPost = (values, token) => {
-    
-    return getBase64(values.upload[0].originFileObj)
-        .then( dataUrl => {
-            ApiService.post(`Post`,token,
-            // Final parameter is the buffer for the post and its description
-            {
-                Description : encrypt(values.description),
-                Bytes: encryptDataUrl(dataUrl) 
-            })
-        }) 
+    // if photo = yes, do this:
+    if (values.upload != null) {
+        return getBase64(values.upload[0].originFileObj)
+            .then( dataUrl => {
+                ApiService.post(`Post`,token,
+                // Final parameter is the buffer for the post and its description
+                {
+                    Description : encrypt(values.description),
+                    Bytes: encryptDataUrl(dataUrl) 
+                })
+            }) 
+    }
+
+    else {
+        return ApiService.post(`Post`,token,
+        {
+            Description : encrypt(values.description),
+        })
+    }
 }
 
 const PostService = {

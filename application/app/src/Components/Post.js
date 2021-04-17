@@ -9,7 +9,7 @@ function Post(props){
 
     return (
         <div style={{padding: 10}}>
-            <Card size="small" title={postInfo.username} cover={<img alt="example" src={postInfo.mediaUrl} />}  >          
+            <Card size="small" title={postInfo.username} cover={<img src={postInfo.mediaUrl} />}  >          
                 <p>{postInfo.description}</p>
             </Card>
         </div>
