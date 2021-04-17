@@ -65,7 +65,7 @@ namespace InnerCircleAPI.Services
             using MemoryStream memoryStream = new MemoryStream(bytes, writable: false);
             {
                 var response = blobClient.Upload(memoryStream);
-                return blobName;
+            return $"https://innercireclemedia.blob.core.windows.net/media/{blobName}";
             }
             
         }
@@ -76,6 +76,11 @@ namespace InnerCircleAPI.Services
             var base64 = matches.Groups["data"].Value;
             var mediaType = matches.Groups["type"].Value;
             
+           if( base64 == "" || mediaType == "")
+            {
+                throw new Exception("Invalid data url");
+            }
+
             string extension = "";
             
             if(mediaType.Contains("image"))

@@ -41,7 +41,7 @@ namespace InnerCircleAPI.Controllers
 
             var post = new Post
             {
-                MediaUrl = PostService.UploadMediaToBlob(bytes,Media["extension"]),
+                MediaUrl = postDto.Bytes,//PostService.UploadMediaToBlob(bytes,Media["extension"]),
                 Description = postDto.Description,
             };
 

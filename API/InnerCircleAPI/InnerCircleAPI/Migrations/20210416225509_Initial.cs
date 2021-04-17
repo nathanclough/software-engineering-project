@@ -10,10 +10,10 @@ namespace InnerCircleAPI.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    AccountId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AccountId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -24,12 +24,12 @@ namespace InnerCircleAPI.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    PostId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AccountId = table.Column<long>(type: "bigint", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PostId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MediaUrl = table.Column<string>(type: "TEXT", nullable: true),
+                    Username = table.Column<string>(type: "TEXT", nullable: true),
+                    AccountId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,11 +40,11 @@ namespace InnerCircleAPI.Migrations
                 name: "Requests",
                 columns: table => new
                 {
-                    RequestId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SenderId = table.Column<long>(type: "bigint", nullable: false),
-                    RecepientId = table.Column<long>(type: "bigint", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    RequestId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SenderId = table.Column<long>(type: "INTEGER", nullable: false),
+                    RecepientId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -55,9 +55,9 @@ namespace InnerCircleAPI.Migrations
                 name: "Circles",
                 columns: table => new
                 {
-                    CircleId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<long>(type: "bigint", nullable: false)
+                    CircleId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,10 +74,10 @@ namespace InnerCircleAPI.Migrations
                 name: "Emails",
                 columns: table => new
                 {
-                    EmailID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountID = table.Column<long>(type: "bigint", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EmailID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountID = table.Column<long>(type: "INTEGER", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,10 +94,10 @@ namespace InnerCircleAPI.Migrations
                 name: "Passwords",
                 columns: table => new
                 {
-                    PasswordID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountID = table.Column<long>(type: "bigint", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PasswordID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountID = table.Column<long>(type: "INTEGER", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,10 +114,10 @@ namespace InnerCircleAPI.Migrations
                 name: "Usernames",
                 columns: table => new
                 {
-                    UsernameID = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountID = table.Column<long>(type: "bigint", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UsernameID = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AccountID = table.Column<long>(type: "INTEGER", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,10 +134,10 @@ namespace InnerCircleAPI.Migrations
                 name: "CircleMembers",
                 columns: table => new
                 {
-                    CircleMemberId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CircleId = table.Column<long>(type: "bigint", nullable: false),
-                    AccountId = table.Column<long>(type: "bigint", nullable: false)
+                    CircleMemberId = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CircleId = table.Column<long>(type: "INTEGER", nullable: false),
+                    AccountId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
