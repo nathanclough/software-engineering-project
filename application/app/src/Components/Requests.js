@@ -36,7 +36,7 @@ function Requests (props){
             }) 
             // Handles error 
             .catch(error => console.log(error))
-    } , 150000000000)).current;
+    } , 150000000000000)).current;
 
     const renderRequests = () =>
     {        

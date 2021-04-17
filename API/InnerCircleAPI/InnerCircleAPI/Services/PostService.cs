@@ -65,7 +65,7 @@ namespace InnerCircleAPI.Services
             using MemoryStream memoryStream = new MemoryStream(bytes, writable: false);
             {
                 var response = blobClient.Upload(memoryStream);
-                return blobName;
+            return $"https://innercireclemedia.blob.core.windows.net/media/{blobName}";
             }
             
         }
@@ -75,10 +75,45 @@ namespace InnerCircleAPI.Services
             var matches = Regex.Match(dataUrl, @"data:(?<type>.+?),(?<data>.+)");
             var base64 = matches.Groups["data"].Value;
             var mediaType = matches.Groups["type"].Value;
+            
+           if( base64 == "" || mediaType == "")
+            {
+                throw new Exception("Invalid data url");
+            }
+
+            string extension = "";
+            
+            if(mediaType.Contains("image"))
+            {
+                if(mediaType.Contains("jpeg"))
+                {
+                    extension = ".jpg";
+                }
+                else if (mediaType.Contains("png"))
+                {
+                    extension= ".png";
+                }
+                else
+                {
+                    throw new Exception($"image media type {mediaType} is not supported");
+                }
+            }
+
+            else if (mediaType.Contains("video"))
+            {
+                if (mediaType.Contains("mp4"))
+                {
+                    extension = ".mp4";
+                }
+                else {
+                    throw new Exception($"video media type {mediaType} is not supported");
+                }
+            }
+
 
             return new Dictionary<string, string>() {
                 { "data", base64 },
-                { "extension", ".jpg"}
+                { "extension", extension}
             };
         }
     }
