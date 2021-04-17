@@ -7,6 +7,7 @@ import AccountService from '../Services/AccountService';
 
 function UserCircle (props) {  
   const [circle,setCircle] = useState([])
+
   // Stores state of the application 
   // has accountId, username, and token properties
   var location = useLocation();
@@ -30,7 +31,7 @@ function UserCircle (props) {
     dataSource={circle}
     renderItem={(item, i) => (
       <List.Item>
-        <ProfileCard username={item.username}key = {i}/>
+        <ProfileCard handleCardClick = {props.handleCardClick} username={item.username}key = {i}/>
       </List.Item>
     )}
   />

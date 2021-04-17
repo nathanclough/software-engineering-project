@@ -8,6 +8,7 @@ import Post from './Post';
 import { Layout, Menu, Popover} from 'antd';
 import logo from '../logo.png';
 import Requests from './Requests';
+import MessagePage from './MessagePage';
 import '../index.css';
 import Item from 'antd/lib/list/Item';
 
@@ -49,11 +50,11 @@ function Homepage(props){
 
       switch(currentTab){
           case "Home":
-              return( <div className="site-layout-content">Home </div>)
+              return( <div className="site-layout-content">Posts</div> )
           case "Account":
               return( <UserProfile accountId={location.state.accountId}/>) 
           case "Messaging":
-              return( <div className="site-layout-content">Messaging</div>)
+              return( <MessagePage/>)
       }
   }
 
