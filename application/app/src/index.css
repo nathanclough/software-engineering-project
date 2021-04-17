@@ -80,3 +80,11 @@ code {
 .ant-card-border {
   width: 100%;
 }
+
+.ant-menu-item .ant-menu-item-only-child {
+  height: 80px;
+}
+
+.ant-menu-vertical .ant-menu-item, .ant-menu-vertical-left .ant-menu-item, .ant-menu-vertical-right .ant-menu-item, .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-submenu-title, .ant-menu-vertical-left .ant-menu-submenu-title, .ant-menu-vertical-right .ant-menu-submenu-title, .ant-menu-inline .ant-menu-submenu-title{
+  height: 80px;
+}

@@ -15,9 +15,10 @@ function CreateMessage(props){
 
   return(
     <Layout>
-      <Content style={{ padding: '0 50px' }}>
-      <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
-        <TextArea rows={4} />
+      <Content >
+      <Layout className="site-layout-background" >
+        <br/>
+        <TextArea rows={2} />
         <br/>
         <Button type="primary">
           Send Message
