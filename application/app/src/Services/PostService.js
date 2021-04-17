@@ -14,40 +14,18 @@ const encryptDataUrl = (dataUrl) => {
     let re = /(.*),(.*)/
     let matches = re.exec(dataUrl)
     var encrypted = CryptoJS.AES.encrypt(matches[2], process.env.REACT_APP_PRIVATE_KEY);
-    return matches[2]+encrypted.toString()
-    // var EC = require('elliptic').ec
-    // var ec = new EC('curve25519');
-    
-    // Generate keys
-    // var key1 = ec.genKeyPair();
-    // var key2 = ec.genKeyPair();
-
-    // var shared1 = key1.derive(key2.getPublic());
-    // var shared2 = key2.derive(key1.getPublic());
-
-    // console.log('Both shared secrets are BN instances');
-    // console.log(shared1.toString(16));
-    // console.log(shared2.toString(16));
-
-    // var pair = ec.genKeyPair();
-    // var privateKey = pair.getPrivate()
-    // console.log("private:" + privateKey.toString('hex'))
-
-    // var publicKey = pair.getPublic()
-    // console.log("public:" + publicKey.toString('hex'))
+    return `${matches[1]},${encrypted.toString()}`
 }
 
 const decryptDataUrl = (dataUrl) => {
     let re = /(.*),(.*)/
     let matches = re.exec(dataUrl)
     var decrypted = decrypt(matches[2]);
-    return matches[1]+decrypted.toString()
+    return matches[1]+","+decrypted.toString()
 }
 
 const encrypt = (string ) => {
-    var e =  CryptoJS.AES.encrypt(string,process.env.REACT_APP_PRIVATE_KEY).toString()
-    console.log("Encrypted:" + e)
-    console.log("Decrypted:" + decrypt(e))
+    return CryptoJS.AES.encrypt(string,process.env.REACT_APP_PRIVATE_KEY).toString()
 }
 
 const decrypt = (string) => {
@@ -61,7 +39,8 @@ const getPosts = (id, token) => {
         .then( data => {
             // Get bytes from the blob url then decrypt them 
             data.forEach(post => {
-                post.description = decrypt(post.description)  
+                post.description = decrypt(post.description)
+                post.mediaUrl = decryptDataUrl(post.mediaUrl)  
             })
             return data
             })
@@ -82,6 +61,7 @@ const createPost = (values, token) => {
 
 const PostService = {
     getPosts,
-    createPost
+    createPost,
+    decryptDataUrl
 }
 export default PostService;

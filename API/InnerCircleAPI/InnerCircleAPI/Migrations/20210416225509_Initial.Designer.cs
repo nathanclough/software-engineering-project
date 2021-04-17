@@ -2,36 +2,32 @@
 using InnerCircleAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InnerCircleAPI.Migrations
 {
     [DbContext(typeof(InnerCircleDataContext))]
-    [Migration("20210408024225_Initial")]
+    [Migration("20210416225509_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3");
 
             modelBuilder.Entity("InnerCircleAPI.Models.Account", b =>
                 {
                     b.Property<long>("AccountId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AccountId");
 
@@ -42,11 +38,10 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("CircleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("CircleId");
 
@@ -60,14 +55,13 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("CircleMemberId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("CircleId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("CircleMemberId");
 
@@ -82,14 +76,13 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("EmailID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountID")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("EmailID");
 
@@ -103,14 +96,13 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("PasswordID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountID")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PasswordID");
 
@@ -124,20 +116,19 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("PostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MediaUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("PostId");
 
@@ -148,17 +139,16 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("RequestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("RecepientId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("SenderId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("RequestId");
 
@@ -169,14 +159,13 @@ namespace InnerCircleAPI.Migrations
                 {
                     b.Property<long>("UsernameID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("AccountID")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UsernameID");
 
