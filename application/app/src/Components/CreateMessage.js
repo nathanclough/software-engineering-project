@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Input, Button, Layout} from 'antd';
 
@@ -8,19 +8,22 @@ const { TextArea } = Input;
 
 function CreateMessage(props){
 
-  /*const handleClick = e => {
-    (e.key)
-  }*/
-
+  const [text,setText] = useState()
+  const handleClick = e => {
+    props.handleSubmit(text)
+  }
+  const onChangeText = e => {
+    setText(e.target.value)
+  }
 
   return(
     <Layout>
       <Content >
       <Layout className="site-layout-background" >
         <br/>
-        <TextArea rows={2} />
+        <TextArea onChange={onChangeText} rows={2} />
         <br/>
-        <Button type="primary">
+        <Button onClick={handleClick} type="primary">
           Send Message
         </Button>
       </Layout>

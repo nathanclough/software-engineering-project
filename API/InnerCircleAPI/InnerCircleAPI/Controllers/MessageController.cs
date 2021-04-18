@@ -41,8 +41,9 @@ namespace InnerCircleAPI.Controllers
 
         }
 
-
-        public ActionResult<List<Message>> GetPosts(long id)
+        [Authorize]
+        [HttpGet]
+        public ActionResult<List<Message>> GetMessages(long id)
         {
             // Get the accountId of currentUser
             var MessageTokenAccountId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountID").Value;

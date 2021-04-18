@@ -7,6 +7,7 @@ import { MessageOutlined, PlusOutlined } from '@ant-design/icons';
 import Message from './Message';
 import CreateMessage from './CreateMessage';
 import UserCircle from './UserCircle';
+import AccountService from '../Services/AccountService'
 import {useLocation} from "react-router-dom";
 import ProfileCard from './ProfileCard';
 
@@ -15,9 +16,10 @@ const { Content, Sider } = Layout;
 function MessagePage(props){
 
     var location = useLocation();
-
+    const mounted = useRef(true);
     const [currentConversation, setCurrentConversation]  = useState(0);
 
+    const [convos, setConvos] = useState([])
     const handleClick = e => {
         setCurrentConversation(e.key)
     }
@@ -26,14 +28,28 @@ function MessagePage(props){
         setCurrentConversation("Messages")
     }
 
-    const convos = [
+
+    useEffect( () =>{
+        mounted.current = true;
+        if(props.accountId != 0)
+        {
+        AccountService.GetAccountCircle(location.state.accountId, location.state.token)
+        .then( data => {
+            if(mounted.current){
+                setConvos(data)
+            }
+        })
+        return () => mounted.current = false;}
+    }, [])
+
+    const convosTest = [
         {
             username: "k",
             accountId: 2
         },
         {
             username: "KUrbanczyk",
-            accountId: 1
+            accountId: 3
         }
     ]
 
@@ -46,7 +62,7 @@ function MessagePage(props){
                 <Sider className="site-layout-background" width={300}>
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={['0']}
                     defaultOpenKeys={['sub1']}
                     style={{ height: '100%' }}
                 >
