@@ -17,6 +17,7 @@ namespace InnerCircleAPI.Models
         public DbSet<Request> Requests { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Circle> Circles { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         public InnerCircleDataContext(DbContextOptions<InnerCircleDataContext> options) : base(options)
         {
