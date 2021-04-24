@@ -96,7 +96,7 @@ function Chat(props){
             return(<div> { messages.map( (message,i ) => {
                 var info = {}
                 // If the sender is not current user
-                if(message.SenderId == account.accountId){
+                if(message.senderId == account.accountId){
                     info.username = account.username    
                 }
                 // sender is current user 
