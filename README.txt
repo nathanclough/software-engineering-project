@@ -3,7 +3,6 @@ readme.txt
 Created homepage layout
     Homepage.js
 
-Two Additional Features Implemented:
 
 1. Circle
         - Request friends to join your circle 
@@ -28,5 +27,18 @@ Two Additional Features Implemented:
         - View posts from other users in your circle 
         - Tag users in your circle in your post 
 
-    CreatePost.js
-    Post.js
+Two Additional Features Implemented:
+3. Messages 
+        - Send message 
+        - Recieve message
+        - Search for user to send 
+        - Look at conversations 
+    MessageService.js
+    MessageController.cs
+    MessageService.cs
+    
+4. Encryption 
+        - Added encryption to the Posts before sent to server
+        - Added decryption to posts once they are recieved 
+
+    added functions to existing classes 
